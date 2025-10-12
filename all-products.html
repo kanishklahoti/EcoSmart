@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>All Products | Smart Sustainable Living</title>
+<style>
+/* ========== RESET & BASE ========== */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Arial',sans-serif;scroll-behavior:smooth;}
+body{overflow-x:hidden;background:#111;color:#fff;line-height:1.6;}
+a{text-decoration:none;}
+button{cursor:pointer;font-family:inherit;}
+
+/* ========== NAVIGATION (restored to your original style) ========== */
+nav{position:sticky;top:0;z-index:999;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);
+display:flex;justify-content:space-between;align-items:center;padding:20px 60px;border-bottom:2px solid transparent;
+border-image:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc) 1;box-shadow:0 15px 25px rgba(0,0,0,0.3);}
+nav .logo{font-size:1.8em;font-weight:bold;background:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav a{color:white;margin-left:25px;text-decoration:none;font-weight:bold;position:relative;}
+nav a::after{content:"";position:absolute;width:0;height:2px;bottom:-3px;left:0;
+background:linear-gradient(90deg,#ff512f,#dd2476,#36d1dc);transition:0.5s;}
+nav a:hover::after{width:100%;}
+.nav-left {display: flex;align-items: center;gap: 15px;}
+.icon-box img {width: 40px;height: 40px;object-fit: contain;border-radius: 8px;}
+nav a {transition: all 0.3s ease;}
+nav a:hover {color: #ffeb3b; transform: translateY(-3px); text-shadow: 0 2px 5px rgba(255,235,59,0.7);}
+/* HAMBURGER BASE */
+.hamburger {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: white;
+}
+
+/* NAV-LINKS MOBILE */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: rgba(0,0,0,0.9);
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  }
+
+  .nav-links a {
+    margin: 0;
+    font-size: 1.2em;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* ========== PAGE TITLE ========== */
+.page-title {text-align:center; font-size:2.5em; margin:50px 0; background:linear-gradient(90deg,#ff512f,#dd2476,#36d1dc,#fff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+
+/* ========== FILTER BAR ========== */
+.filter-bar {text-align:center; display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;margin-bottom:30px;padding:0 12px;}
+.filter-bar .btn {margin:5px;padding:10px 20px;border:none;border-radius:30px;background:rgba(255,255,255,0.1);color:#fff;font-weight:bold;transition:0.3s;cursor:pointer;}
+.filter-bar .btn:hover, .filter-bar .btn.active {background:linear-gradient(90deg,#ff512f,#dd2476,#36d1dc);box-shadow:0 0 15px rgba(255,81,47,0.5);}
+.filter-inline {display:flex;gap:12px;align-items:center;}
+.sort-select{padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);color:#fff;font-weight:700;min-width:220px;-webkit-appearance:none;appearance:none;}
+.sort-select option{color:#111;background:#fff;}
+.price-range{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);color:#fff;}
+.price-range input[type="range"]{width:160px;}
+.price-value{min-width:80px;text-align:center;font-weight:700;color:#fff;}
+
+/* ========== PRODUCTS SECTION (restored background to your original) ========== */
+.products-section {
+  padding:50px 20px;
+  background: linear-gradient(270deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#8f00ff);
+  background-size: 1200% 1200%;
+  animation: rainbowBG 20s ease infinite;
+  border-radius:30px;
+}
+@keyframes rainbowBG{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* ========== PRODUCTS GRID: 3x5 layout at desktop ========== */
+.products{display:grid;grid-template-columns:repeat(3,minmax(300px,1fr));gap:40px;position:relative;}
+@media (max-width:980px){ .products{grid-template-columns:repeat(2,minmax(240px,1fr));} }
+@media (max-width:600px){ .products{grid-template-columns:1fr;gap:20px;} }
+
+/* ========== CARD STYLES (keep your look) ========== */
+.card{background:#111;border-radius:20px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.3);transition:.5s;position:relative; z-index:0; border: 2px solid transparent; cursor:pointer;}
+/* Rainbow hover for product cards */
+.card::before {
+  content: "";
+  position: absolute;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
+  background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8f00ff);
+  background-size: 600% 600%;
+  z-index: -1;
+  border-radius: 22px;
+  filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.5s;
+  animation: rainbowAnim 5s linear infinite;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+@keyframes rainbowAnim {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+.card:hover{transform:translateY(-10px) scale(1.05); box-shadow:0 20px 40px rgba(0,0,0,0.6);}
+.card .img-wrap{position:relative;overflow:hidden;}
+.card img{width:100%;height:200px;object-fit:cover;display:block;transition:transform .5s;}
+.card:hover img{transform:scale(1.06);}
+.card-content{padding:20px;}
+.card-content h3{margin-bottom:10px;background:linear-gradient(90deg,#36d1dc,#5b86e5,#ff6a00,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.price{display:inline-block;font-weight:bold;background:linear-gradient(90deg,#ffeb3b,#ff4081,#36d1dc,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-right:15px;}
+.discount{display:inline-block;color:#fff;text-shadow:0 0 5px #000;font-weight:bold;}
+.card-buttons {margin-top:15px; display:flex; gap:10px;}
+.card-content .btn{padding:10px 20px;border-radius:30px;background:linear-gradient(90deg,#ff512f,#dd2476);color:white;font-weight:bold;text-decoration:none;transition:0.3s;display:inline-block;border:none;}
+.card-content .btn.secondary{background:red;border:1px solid rgba(255,255,255,0.06);}
+
+/* wishlist heart (clickable) */
+.wishlist{position:absolute;right:10px;top:10px;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;transition:transform .2s;border:1px solid rgba(255,255,255,0.04);}
+.wishlist:hover{transform:scale(1.05);}
+.wishlist .heart{font-size:18px;color:rgba(255,255,255,0.75);pointer-events:none;}
+.wishlist.active{background:linear-gradient(90deg,#ff6a00,#ee0979);box-shadow:0 8px 18px rgba(238,9,121,0.12);}
+.wishlist.active .heart{color:#fff;}
+
+/* click ripple */
+.click-ripple{position:absolute;border-radius:50%;background:rgba(124,252,0,0.14);pointer-events:none;transform:scale(0);opacity:0;transition:transform .6s ease,opacity .6s ease;}
+
+/* badges */
+.badge{position:absolute;left:0;top:12px;background:linear-gradient(90deg,#2ecc71,#27ae60);color:#fff;padding:6px 12px;border-top-right-radius:8px;border-bottom-right-radius:8px;font-weight:800;font-size:0.85rem;transform:skewX(-10deg);box-shadow:0 6px 18px rgba(0,0,0,0.4);}
+.badge.best{background:linear-gradient(90deg,#ffd54f,#ffb300);color:#111;}
+.badge.new{background:linear-gradient(90deg,#36d1dc,#5b86e5);}
+
+/* ========== CONTACT (preserve original formatting you provided) ========== */
+.contact{background:linear-gradient(45deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#8f00ff);background-size:400% 400%;animation:gradientBG 20s ease infinite;padding:60px 20px;border-radius:30px;}
+.contact h2{font-size:2.5em;margin-bottom:30px;color:white;text-align:center;}
+.contact form{max-width:600px;margin:auto;display:flex;flex-direction:column;}
+.contact input,.contact textarea{padding:15px;margin-bottom:15px;border-radius:10px;border:none;}
+.contact button{padding:15px;border-radius:50px;background:linear-gradient(90deg,#ff512f,#dd2476);color:white;font-weight:bold;cursor:pointer;}
+
+footer {
+  background: linear-gradient(135deg, #2B1A55,#4b23ad);
+  padding: 25px 40px;
+  margin-top: 40px;
+  border-radius: 12px 12px 0 0;
+  color: #CO6C84;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  border: 2px solid #C06C84; /* Rose glowing border */
+  box-shadow: 0 0 12px rgba(192,108,132,0.7);
+}
+
+footer .footer-left {
+  flex: 70%;
+  padding-right: 20px;
+  border-right: 2px solid #FFD166; /* vivid gold divider */
+}
+
+footer .footer-right {
+  flex: 30%;
+  text-align: right;
+  padding-left: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+}
+
+footer .footer-right a {
+  color: #FFD166; /* Gold links */
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+footer .footer-right a:hover {
+  color: #FFFFFF; /* White on hover */
+}
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  footer .footer-left {
+    border-right: none;   /* remove divider on small screens */
+    border-bottom: 2px solid #FFD166; /* optional: horizontal divider */
+    padding: 10px 0;
+  }
+
+  footer .footer-right {
+    justify-content: center;
+    margin-top: 15px;
+    padding-left: 0;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+
+/* ========== FLOATING CART ICON ========== */
+.cart-icon {position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; border-radius: 50%; background:linear-gradient(90deg,#ff512f,#dd2476); display:flex; justify-content:center; align-items:center; box-shadow:0 5px 20px rgba(0,0,0,0.5); cursor:pointer; z-index:1000;}
+.cart-icon span {position:absolute; top:5px; right:8px; background:#ffeb3b; color:#000; font-weight:bold; padding:2px 8px; border-radius:50%; font-size:0.8em;}
+
+/* ========== CART PANEL (preserve original look + animations) ========== */
+.cart-panel {position: fixed; right: -420px; top: 0; width: 420px; height: 100%; background:#111; color:#fff; padding:20px; box-shadow:-5px 0 30px rgba(0,0,0,0.5); transition:right 0.35s; overflow-y:auto; z-index:1001; display:flex; flex-direction:column;}
+.cart-panel.show {right:0;}
+.cart-panel h2{margin-bottom:20px;}
+.cart-item {display:flex;align-items:center;margin-bottom:15px;background:#1a1a1a;padding:10px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.4);transform:translateX(20px);opacity:0;transition:transform .35s,opacity .35s;}
+.cart-item.visible{transform:translateX(0);opacity:1;}
+.cart-item img {width:60px;height:60px;object-fit:cover;margin-right:10px;border-radius:8px;}
+.cart-item .item-info {flex:1;}
+.cart-item .item-info p {margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;}
+.cart-item .quantity {display:flex;align-items:center;gap:5px;margin-top:5px;}
+.cart-item .quantity button {padding:6px 8px;cursor:pointer;border:none;border-radius:5px;background:#ff512f;color:white;transition:0.3s;}
+.cart-item .remove-item{background:red;color:white;border:none;border-radius:50%;padding:4px 8px;cursor:pointer;transition:0.3s;}
+.cart-item .remove-item:hover{background:#ff0000; transform:scale(1.05);}
+.cart-panel .total {margin-top:auto;font-size:1.2em;font-weight:bold;transition:opacity .2s;}
+.cart-panel .checkout-btn {margin-top:10px;padding:10px;border:none;border-radius:30px;background:linear-gradient(90deg,#ff512f,#dd2476);color:white;font-weight:bold;cursor:pointer;transition:0.3s;}
+.cart-panel .checkout-btn:hover{transform:scale(1.05);box-shadow:0 0 15px #ff512f;}
+.cart-panel .close-cart {position:absolute;top:10px;right:10px;cursor:pointer;font-size:1.2em;background:none;border:none;color:red;}
+
+/* ========== CHECKOUT MODAL (demo) ========== */
+.checkout-modal {position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition:0.3s; z-index:1002;}
+.checkout-modal.show {opacity:1; pointer-events:auto;}
+.checkout-modal .modal-content {background:#222; padding:30px; border-radius:20px; position:relative; max-width:420px; text-align:center;}
+.checkout-modal .modal-content .close-modal {position:absolute;top:10px;right:10px;cursor:pointer;font-size:1.2em;background:none;border:none;color:#fff;}
+.checkout-modal .modal-content p {font-size:1.1em;}
+.checkout-modal form {display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.checkout-modal input, .checkout-modal textarea {padding:10px;border-radius:8px;border:none;background:#111;color:#fff;}
+.checkout-modal .place-order {padding:10px;border-radius:30px;background:linear-gradient(90deg,#27ae60,#2ecc71);border:none;color:#111;font-weight:800;cursor:pointer;}
+
+/* checkmark animation */
+.checkmark {
+  width:80px;height:80px;border-radius:50%;display:inline-block;border:4px solid rgba(46,204,113,0.15);position:relative;margin:12px auto;
+}
+.checkmark svg {display:block;margin:0 auto}
+.success-msg{font-weight:700;margin-top:8px;color:#bffcc6;}
+
+/* small fade-in util for elements */
+.fade-child {opacity:0; transform:translateY(20px); transition: opacity 700ms cubic-bezier(.2,.9,.2,1), transform 700ms cubic-bezier(.2,.9,.2,1);}
+.fade-child.show {opacity:1; transform:translateY(0);}
+.fade-child.show.scale {transform: translateY(0) scale(1.01);}
+
+/* click green glow */
+.card.clicked{border:2px solid #7CFC00; box-shadow:0 15px 30px rgba(124,252,0,0.6);}
+/* Make price range + value adapt properly on small screens */
+@media (max-width: 600px) {
+  .price-range {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .price-range input[type="range"] {
+    width: 100%; /* take full width */
+    max-width: 250px; /* prevent stretching too much */
+  }
+
+  .price-range .price-value {
+    min-width: auto;
+    font-size: 0.9em;
+    text-align: center;
+    margin-top: 4px;
+}
+}
+</style>
+</head>
+<body class="no-js">
+
+<!-- NAV (unchanged from your last provided code) -->
+<nav>
+  <div class="nav-left">
+    <div class="icon-box">
+      <img src="ecosmart.jpg" alt="EcoSmart Icon">
+    </div>
+    <div class="logo">EcoSmart</div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="#products-section">Products</a>
+    <a href="#contact">Contact</a>
+  </div>
+<div class="hamburger" onclick="toggleMenu()">
+  ☰
+</div>
+</nav>
+
+<!-- PAGE TITLE -->
+<div class="page-title fade-child">All Products</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar fade-child">
+  <div>
+    <button class="btn active" data-filter="all">All</button>
+    <button class="btn" data-filter="smart-home">Smart Home</button>
+    <button class="btn" data-filter="solar">Solar and Planting</button>
+    <button class="btn" data-filter="kitchen">Kitchen</button>
+    <button class="btn" data-filter="air-water">Water</button>
+  </div>
+
+  <div class="filter-inline" style="margin-left:12px">
+    <label style="color:#fff;font-weight:700">
+      Sort:
+      <select id="sortSelect" class="sort-select" aria-label="Sort products">
+        <option value="default">Default</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="popularity-desc">Popularity</option>
+        <option value="discount-desc">Discount</option>
+      </select>
+    </label>
+
+    <div class="price-range" title="Max price">
+      <label style="font-weight:700;color:#fff">Max ₹</label>
+      <input id="priceRange" type="range" min="0" max="26000" value="26000" step="50">
+      <div class="price-value" id="priceValue">₹26000</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<section id="products-section" class="products-section">
+  <div class="products" id="productsGrid">
+    <!-- 15 cards (kept your product copy; added badges, wishlist, data attributes, view-details buttons) -->
+
+    <div class="card fade-child" data-category="smart-home" data-price="5999" data-popularity="65" data-discount="20">
+      <div class="img-wrap">
+        <div class="badge new">NEW</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="automaticcurtains.jpg?text=Automatic+Curtains" alt="Automatic Curtains">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Automatic Curtains</h3>
+        <p>Solar-powered smart curtain control.</p>
+        <div><span class="price">₹5999</span><span class="discount">60% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product1.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-child" data-category="smart-home" data-price="4999" data-popularity="90" data-discount="12">
+      <div class="img-wrap">
+        <div class="badge best">BEST</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="Smartthermostat.jpg?text=Smart+Thermostat" alt="Smart Thermostat">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Thermostat</h3>
+        <p>Save energy with automated climate control.</p>
+        <div><span class="price">₹4999</span><span class="discount">60% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product2.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-child" data-category="smart-home" data-price="3500" data-popularity="80" data-discount="10">
+      <div class="img-wrap">
+        <div class="badge" style="background:linear-gradient(90deg,#6ab04c,#2ecc71)">New</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="smartdoorlock3.jpg?text=Smart+Door+Lock" alt="Smart Door Lock">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Door Lock</h3>
+        <p>Secure your home with keyless entry.</p>
+        <div><span class="price">₹3500</span><span class="discount">60% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product3.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  <div class="card fade-child" data-category="smart-home" data-price="24999" data-popularity="80" data-discount="10">
+      <div class="img-wrap">
+        <div class="badge" style="background:linear-gradient(90deg,#6ab04c,#2ecc71)">Bestseller</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="wadrobe.webp?text=Smart+Door+Lock" alt="Intelligent Wadrobe">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3> Intelligent Wardrobe
+</h3>
+        <p>A closet that steams, deodorizes, and organizes clothes automatically, powered by solar + AI.
+</p>
+        <div><span class="price">₹24999</span><span class="discount">60% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product6.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="card fade-child" data-category="kitchen" data-price="8499" data-popularity="70" data-discount="15">
+      <div class="img-wrap">
+ <div class="badge best">BEST</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="smartfoodmaker1.webp?text=Smart+Food+Maker" alt="Smart Food Maker">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Food Maker</h3>
+        <p>Cook meals efficiently and eco-friendly.<br><br><br></p>
+        <div><span class="price">₹8499</span><span class="discount">35% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product9.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-child" data-category="smart-home" data-price="14999" data-popularity="72" data-discount="10">
+      <div class="img-wrap">
+<div class="badge" style="background:linear-gradient(90deg,#6ab04c,#2ecc71)">New</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="smartwindow1.jpg?text=Smart+Coffee+Maker"  alt="Smart Coffee Maker">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Induction Window Frames
+</h3>
+        <p>Windows that generate energy from sunlight + can auto-darken/tint + have hidden wireless charging strips built in.
+</p>
+        <div><span class="price">₹14999</span><span class="discount">50% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product7.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-child" data-category="kitchen" data-price="7999" data-popularity="60" data-discount="40">
+      <div class="img-wrap">
+<div class="badge" style="background:linear-gradient(90deg,#6ab04c,#2ecc71)">SMART</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="smartinductioncooktop1.webp?text=Smart+Blender" alt="Smart Blender">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Induction Cooktop</h3>
+        <p>Low-energy induction with recipe app integration.<br><br>
+</p>
+        <div><span class="price">₹7999</span><span class="discount">40% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product10.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+<div class="card fade-child" data-category="kitchen" data-price="6500" data-popularity="60" data-discount="45">
+      <div class="img-wrap">
+ <div class="badge best">BESTSELLER</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="aibin_front.jpg?text=Smart+Blender" alt="Smart Blender">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3> AI Bin Recycler
+</h3>
+        <p>A compact appliance that turns organic waste into compost and plastic into reusable pellets.<br><br>
+</p>
+        <div><span class="price">₹6500</span><span class="discount">45% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product11.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+
+    
+
+    <div class="card fade-child" data-category="smart-home" data-price="8999" data-popularity="75" data-discount="18">
+      <div class="img-wrap">
+        <div class="badge best">NEW</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="flooring1.jpg?text=Solar+Water+Heater" alt="Solar Water Heater">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3> Energy-Harvesting Flooring
+</h3>
+        <p>Flooring that generates electricity from footsteps and vibrations, storing energy for household use.
+
+</p>
+        <div><span class="price">₹8999</span><span class="discount">30% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product8.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+   
+
+    <div class="card fade-child" data-category="air-water" data-price="21999" data-popularity="74" data-discount="30">
+      <div class="img-wrap">
+        <div class="badge new">ECO</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="rainwater1.jpg?text=Water+Purifier" alt="Water Purifier">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3> Smart Rainwater Harvest + Purifier System
+</h3>
+        <p>A smart system that collects, purifies, and redistributes rainwater for home use.
+
+
+</p>
+        <div><span class="price">₹21999</span><span class="discount">30% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product16.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="card fade-child" data-category="smart-home" data-price="5799" data-popularity="85" data-discount="15">
+      <div class="img-wrap">
+
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="smartlight2.webp?text=Smart+Lighting+System" alt="Smart Lighting System">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Lighting System</h3>
+        <p>Color-changing lights with app control.<br><br><br></p>
+        <div><span class="price">₹5799</span><span class="discount">60% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product4.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-child" data-category="smart-home" data-price="3000" data-popularity="95" data-discount="12">
+      <div class="img-wrap">
+        <div class="badge best">BEST</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="smartcamera.webp?text=Smart+Security+Camera" alt="Smart Security Camera">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Security Camera</h3>
+        <p>Monitor your home remotely in real-time.<br><br><br></p>
+        <div><span class="price">₹3000</span><span class="discount">60% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product5.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card fade-child" data-category="solar" data-price="4499" data-popularity="62" data-discount="25">
+      <div class="img-wrap">
+<div class="badge" style="background:linear-gradient(90deg,#6ab04c,#2ecc71)">SMART</div>
+        <div class="wishlist" title="Add to Wishlist"><div class="heart">♡</div></div>
+        <img src="bag1.webp?text=Solar+Bagpack" alt="Solar Bagpack">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Solar Bagpack</h3>
+        <p>Charge gadgets on the go with solar panels.<br><br>
+</p>
+        <div><span class="price">₹4499</span><span class="discount">25% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product12.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+<div class="card fade-child" data-category="solar" data-price="5999" data-popularity="62" data-discount="45">
+      <div class="img-wrap">
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="fan1.jpg?text=Solar+Bagpack" alt="Solar Bagpack">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Smart Solar Fan</h3>
+        <p>Runs on solar + battery, app controlled with variable speed.
+
+</p>
+        <div><span class="price">₹5999</span><span class="discount">45% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product13.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+<div class="card fade-child" data-category="solar" data-price="19999" data-popularity="62" data-discount="20">
+      <div class="img-wrap">
+<div class="badge" style="background:linear-gradient(90deg,#6ab04c,#2ecc71)">PLANTS</div>
+        <div class="wishlist" title="Add to wishlist"><div class="heart">♡</div></div>
+        <img src="watering1.jpg?text=Solar+Bagpack" alt="Solar Bagpack">
+        <div class="click-ripple"></div>
+      </div>
+      <div class="card-content fade-child">
+        <h3>Automatic Plant Watering System</h3>
+        <p>Solar-powered drip irrigation with app scheduling.
+
+
+
+</p>
+        <div><span class="price">₹19999</span><span class="discount">20% OFF</span></div>
+        <div class="card-buttons">
+          <button class="btn secondary view-details" data-link="product15.html">View Details</button>
+          <button class="btn add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+
+<!-- CONTACT (preserved formatting) -->
+<section class="contact" id="contact">
+ <h2 class="fade-child">Contact Us</h2>
+ <form action="https://formspree.io/f/xqaybodj" method="POST" class="fade-child">
+   <input type="text" name="firstName" placeholder="First Name" required>
+   <input type="text" name="lastName" placeholder="Last Name" required>
+   <input type="email" name="email" placeholder="Email" required>
+   <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+   <button type="submit">Submit</button>
+ </form>
+</section>
+
+<footer>
+  <div class="footer-left">
+    © 2025 EcoSmart | All Rights Reserved| 
+    Contact: +91 9920190050 <BR>Email: kanishklahoti9@gmail.com
+ 
+<p style="font-size: 10px; color:#888;">
+⚠ Disclaimer: This is a demo website for project purposes only.
+    Orders, payments, and deliveries are not functional.</p>
+</div>
+  <div class="footer-right">
+
+    <a href="pp.html" target="_blank">Privacy Policy</a><br>
+    <a href="tc.html" target="_blank">Terms and Conditions</a><br>
+    <a href="as.html" target="_blank">Accessibility Statement</a>
+  </div>
+</footer>
+
+
+<!-- FLOATING CART ICON -->
+<div class="cart-icon" id="cartIcon">🛒
+  <span id="cart-count">0</span>
+</div>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cart-panel">
+  <button class="close-cart" id="close-cart">✖</button>
+  <h2>Your Shopping Cart!</h2>
+  <div id="cart-items"></div>
+  <div class="total" id="cart-total">Total: ₹0</div>
+  <button class="checkout-btn" id="checkout-btn">Checkout</button>
+</div>
+
+<!-- CHECKOUT MODAL (now contains dummy checkout form & confirmation) -->
+<div class="checkout-modal" id="checkout-modal">
+  <div class="modal-content" id="checkoutContent">
+    <button class="close-modal" id="close-modal">✖</button>
+
+    <!-- Dummy checkout form -->
+    <h3 style="color:#fff;margin-bottom:8px"> Demo Checkout</h3>
+    <form id="dummyCheckoutForm">
+      <input type="text" name="name" placeholder="Full name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="text" name="address" placeholder="Address" required>
+      <input type="text" name="phone" placeholder="Phone" required>
+      <input type="text" name="card" placeholder="Card number (demo)" required>
+ <input type="text" name="product" placeholder="Product name(s) and (quantity)"  required>
+      <div style="display:flex;gap:8px;">
+        <input style="flex:1" type="text" name="expiry" placeholder="MM/YY" required>
+        <input style="width:100px" type="text" name="cvv" placeholder="CVV" required>
+      </div>
+      <button class="place-order" type="submit">Place Demo Order</button>
+    </form>
+
+    <!-- Success area (hidden until order placed) -->
+    <div id="checkoutSuccess" style="display:none">
+      <div class="checkmark" aria-hidden="true">
+        <!-- animated svg check -->
+        <svg width="80" height="80" viewBox="0 0 52 52">
+          <circle cx="26" cy="26" r="25" fill="none" stroke="#2ecc71" stroke-width="2" opacity="0.12"></circle>
+          <path fill="none" stroke="#2ecc71" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M14 27l7 7 17-17" stroke-dasharray="50" stroke-dashoffset="50">
+          </path>
+        </svg>
+      </div>
+      <div class="success-msg">Order received — demo confirmation!<br>We will contact you for shipping and payement processing.</div>
+    </div>
+
+  </div>
+</div>
+<script>
+  const form = document.getElementById('dummyCheckoutForm');
+  const successMsg = document.getElementById('checkoutSuccess');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent page refresh
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('https://formspree.io/f/mrbyanvg', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        // Show success message
+        successMsg.style.display = 'block';
+        // Clear the form
+        form.reset();
+      } else {
+        alert('Oops! There was a problem submitting your form.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error sending form. Please try again later.');
+    }
+  });
+</script>
+
+
+<script>
+/* ========== Init & fade-up animation ========== */
+document.body.classList.remove('no-js');
+const faders = document.querySelectorAll('.fade-child');
+const observer = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){entry.target.classList.add('show'); obs.unobserve(entry.target);}
+  });
+}, { threshold: 0.1 });
+faders.forEach(f => observer.observe(f));
+
+/* ========== Filtering (category) & Price Range & Sorting ========== */
+const filterButtons = document.querySelectorAll('.filter-bar .btn');
+let cards = Array.from(document.querySelectorAll('.products .card'));
+const sortSelect = document.getElementById('sortSelect');
+const priceRange = document.getElementById('priceRange');
+const priceValue = document.getElementById('priceValue');
+
+filterButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  });
+});
+
+// set priceRange max to max product price
+const prices = cards.map(c => Number(c.dataset.price || c.querySelector('.price')?.textContent.replace(/₹|,/g,'') || 0));
+const maxPrice = Math.max(...prices, 4000);
+priceRange.max = Math.ceil(maxPrice/50)*100;
+priceRange.value = priceRange.max;
+priceValue.textContent = '₹' + priceRange.value;
+
+priceRange.addEventListener('input', () => {
+  priceValue.textContent = '₹' + priceRange.value;
+  applyFilters();
+});
+
+// sorting
+sortSelect.addEventListener('change', ()=> applySort());
+
+function applyFilters(){
+  const filter = document.querySelector('.filter-bar .btn.active').dataset.filter;
+  const maxP = Number(priceRange.value);
+  cards.forEach(card => {
+    const price = Number(card.dataset.price || card.querySelector('.price')?.textContent.replace(/₹|,/g,'') || 0);
+    const matchCat = (filter === 'all' || card.dataset.category === filter);
+    if(matchCat && price <= maxP){
+      card.style.display = 'block';
+      setTimeout(()=>{ card.classList.add('show','scale'); }, 20);
+    } else {
+      card.classList.remove('show','scale');
+      setTimeout(()=>{ card.style.display = 'none'; }, 280);
+    }
+  });
+  applySort();
+}
+
+function applySort(){
+  const mode = sortSelect.value;
+  const container = document.getElementById('productsGrid');
+  const visible = cards.filter(c=> c.style.display !== 'none');
+  let sorted = visible.slice();
+  if(mode === 'price-asc') sorted.sort((a,b)=> (a.dataset.price||0) - (b.dataset.price||0));
+  else if(mode === 'price-desc') sorted.sort((a,b)=> (b.dataset.price||0) - (a.dataset.price||0));
+  else if(mode === 'popularity-desc') sorted.sort((a,b)=> (b.dataset.popularity||0) - (a.dataset.popularity||0));
+  else if(mode === 'discount-desc') sorted.sort((a,b)=> (b.dataset.discount||0) - (a.dataset.discount||0));
+  sorted.forEach(n => container.appendChild(n));
+}
+
+/* run initial filter to ensure layout */
+applyFilters();
+
+/* ========== Wishlist (heart) click ======== */
+document.getElementById('productsGrid').addEventListener('click', (e) => {
+  const w = e.target.closest('.wishlist');
+  if(!w) return;
+  w.classList.toggle('active');
+  const heart = w.querySelector('.heart');
+  heart.textContent = w.classList.contains('active') ? '♥' : '♡';
+});
+
+/* ========== View Details buttons (styled like Add to Cart) ====== */
+document.addEventListener('click', (e) => {
+  const vd = e.target.closest('.view-details');
+  if(!vd) return;
+  const href = vd.dataset.link;
+  if(href && href.trim()!=='') {
+    // navigate to product page (placeholder). If not created yet, this won't break anything.
+    window.location.href = href;
+  }
+});
+
+/* ========== Card click ripple + light-green glow ========= */
+document.getElementById('productsGrid').addEventListener('click', (e) => {
+  // ripple and click glow happen for clicks inside a card; we keep single handler
+  const card = e.target.closest('.card');
+  if(!card) return;
+
+  // ripple element
+  const ripple = card.querySelector('.click-ripple');
+  if(ripple){
+    const rect = card.getBoundingClientRect();
+    const cx = (e.clientX || rect.left + rect.width/2) - rect.left;
+    const cy = (e.clientY || rect.top + rect.height/2) - rect.top;
+    ripple.style.left = (cx - 60) + 'px';
+    ripple.style.top = (cy - 60) + 'px';
+    ripple.style.width = ripple.style.height = '120px';
+    ripple.style.transform = 'scale(0.9)';
+    ripple.style.opacity = '1';
+    // trigger expand & fade
+    setTimeout(()=>{ ripple.style.transform = 'scale(1.8)'; ripple.style.opacity = '0'; }, 10);
+    setTimeout(()=>{ ripple.style.width = ripple.style.height = '0px'; ripple.style.opacity='0'; ripple.style.transform='scale(0)'; }, 600);
+  }
+  // green glow briefly
+  card.classList.add('clicked');
+  setTimeout(()=>card.classList.remove('clicked'), 550);
+});
+
+/* ========== Add to cart: fly-to-cart + data updates ========= */
+const cartIcon = document.getElementById('cartIcon');
+const cartPanel = document.getElementById('cart-panel');
+const cartItemsDiv = document.getElementById('cart-items');
+const cartCountSpan = document.getElementById('cart-count');
+const cartTotalDiv = document.getElementById('cart-total');
+const checkoutBtn = document.getElementById('checkout-btn');
+const checkoutModal = document.getElementById('checkout-modal');
+
+let cart = [];
+
+function updateCartPanel(){
+  cartItemsDiv.innerHTML = '';
+  let total = 0;
+  cart.forEach((item, index) => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <img src="${item.img}" alt="">
+      <div class="item-info">
+        <p>${item.name} <button class="remove-item" data-idx="${index}">✖</button></p>
+        <div class="quantity">
+          <button class="decrease" data-idx="${index}">-</button>
+          <span class="qty" data-idx="${index}">${item.quantity}</span>
+          <button class="increase" data-idx="${index}">+</button>
+        </div>
+        <div class="price">₹${itemTotal}</div>
+      </div>
+    `;
+    cartItemsDiv.appendChild(div);
+    // animate slide-in
+    setTimeout(()=>div.classList.add('visible'), 20);
+  });
+  cartTotalDiv.style.opacity = '0.5';
+  setTimeout(()=>{ cartTotalDiv.textContent = 'Total: ₹' + total; cartTotalDiv.style.opacity='1'; }, 200);
+  cartCountSpan.textContent = cart.reduce((s,i)=>s+i.quantity,0);
+}
+
+/* event delegation for Add to Cart buttons */
+document.addEventListener('click', function(e){
+  const addBtn = e.target.closest('.add-to-cart');
+  if(!addBtn) return;
+
+  const card = e.target.closest('.card');
+  const img = card.querySelector('img').src;
+  const name = card.querySelector('h3').textContent;
+  const price = Number(card.dataset.price || card.querySelector('.price')?.textContent.replace(/₹|,/g,'') || 0);
+
+  // fly-to-cart animation from that card image
+  flyToCart(img, card);
+
+  // update cart data
+  const existing = cart.find(i => i.name === name);
+  if(existing) existing.quantity++;
+  else cart.push({ name, img, price, quantity: 1 });
+
+  updateCartPanel();
+  cartPanel.classList.add('show');
+});
+
+/* fly-to-cart implementation */
+function flyToCart(imgSrc, sourceCard){
+  const fly = document.createElement('img');
+  fly.src = imgSrc;
+  fly.style.position = 'fixed';
+  fly.style.width = '120px';
+  fly.style.height = '80px';
+  fly.style.objectFit = 'cover';
+  fly.style.borderRadius = '8px';
+  fly.style.zIndex = '2000';
+  document.body.appendChild(fly);
+
+  const startRect = sourceCard.querySelector('img').getBoundingClientRect();
+  fly.style.left = startRect.left + 'px';
+  fly.style.top = startRect.top + 'px';
+  fly.style.transform = 'scale(1)';
+  fly.style.transition = 'transform .7s cubic-bezier(.22,.9,.35,1), left .7s, top .7s, opacity .6s';
+
+  const cartRect = cartIcon.getBoundingClientRect();
+  // animate by setting left/top to cart position
+  requestAnimationFrame(()=> {
+    fly.style.left = (cartRect.left + 8) + 'px';
+    fly.style.top = (cartRect.top + 8) + 'px';
+    fly.style.transform = 'scale(.25)';
+    fly.style.opacity = '0.6';
+  });
+  setTimeout(()=>{ fly.remove(); }, 900);
+}
+
+/* cart panel toggles */
+cartIcon.addEventListener('click', ()=> cartPanel.classList.toggle('show'));
+document.getElementById('close-cart').addEventListener('click', ()=> cartPanel.classList.remove('show'));
+
+/* quantity / remove inside cart (delegation) */
+cartItemsDiv.addEventListener('click', (e) => {
+  const inc = e.target.closest('.increase');
+  const dec = e.target.closest('.decrease');
+  const rem = e.target.closest('.remove-item');
+  if(inc){
+    const idx = +inc.dataset.idx; cart[idx].quantity++; animateQty(idx); updateCartPanel();
+  }
+  if(dec){
+    const idx = +dec.dataset.idx; if(cart[idx].quantity > 1) cart[idx].quantity--; animateQty(idx); updateCartPanel();
+  }
+  if(rem){
+    const idx = +rem.dataset.idx; cart.splice(idx,1); updateCartPanel();
+  }
+});
+
+function animateQty(idx){
+  const span = cartItemsDiv.querySelector(`.qty[data-idx="${idx}"]`);
+  if(!span) return;
+  span.style.transform = 'scale(1.25)';
+  setTimeout(()=> span.style.transform = 'scale(1)', 180);
+}
+
+/* checkout modal (now contains dummy form & success animation) */
+checkoutBtn.addEventListener('click', ()=> checkoutModal.classList.add('show'));
+document.getElementById('close-modal').addEventListener('click', ()=> {
+  checkoutModal.classList.remove('show');
+  // reset form when closing
+  resetCheckoutModal();
+});
+
+function resetCheckoutModal(){
+  const form = document.getElementById('dummyCheckoutForm');
+  const success = document.getElementById('checkoutSuccess');
+  form.style.display='flex';
+  success.style.display='none';
+  // reset svg stroke dash for animation later
+  const path = checkoutModal.querySelector('path');
+  if(path) { path.style.strokeDashoffset = path.getTotalLength(); }
+  form.reset();
+}
+
+/* handle dummy checkout form submit */
+document.getElementById('dummyCheckoutForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const form = this;
+  // simulate processing -> show animated check and success
+  form.style.display = 'none';
+  const success = document.getElementById('checkoutSuccess');
+  success.style.display = 'block';
+
+  // animate checkmark path
+  const path = success.querySelector('path');
+  if(path){
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    path.style.transition = 'stroke-dashoffset 650ms ease-out';
+    setTimeout(()=>{ path.style.strokeDashoffset = '0'; }, 80);
+  }
+
+  // optional: clear cart visually after demo success
+  setTimeout(()=> {
+    cart = [];
+    updateCartPanel();
+    // keep success shown for a bit then auto-close modal
+    setTimeout(()=> {
+      // keep modal open so user sees success; if you want auto-close uncomment:
+      // checkoutModal.classList.remove('show');
+    }, 900);
+  }, 400);
+});
+
+/* Accessibility & small extra: close UI with Escape */
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ checkoutModal.classList.remove('show'); cartPanel.classList.remove('show'); resetCheckoutModal(); } });
+
+/* Keep contact & footer formatting unchanged (already preserved) */
+function toggleMenu() {
+  document.querySelector(".nav-links").classList.toggle("show");
+}
+</script>
+</body>
+</html>

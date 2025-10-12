@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Smart Sustainable Living</title>
+<style>
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Arial',sans-serif;scroll-behavior:smooth;}
+body{overflow-x:hidden;background:#111;color:#fff;line-height:1.6;}
+
+/* NAVIGATION */
+nav{position:sticky;top:0;z-index:999;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);
+display:flex;justify-content:space-between;align-items:center;padding:20px 60px;border-bottom:2px solid transparent;
+border-image:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc) 1;box-shadow:0 15px 25px rgba(0,0,0,0.3);}
+nav .logo{font-size:1.8em;font-weight:bold;background:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav a{color:white;margin-left:25px;text-decoration:none;font-weight:bold;position:relative;transition: all 0.3s ease;}
+nav a::after{content:"";position:absolute;width:0;height:2px;bottom:-3px;left:0;
+background:linear-gradient(90deg,#ff512f,#dd2476,#36d1dc);transition:0.5s;}
+nav a:hover::after{width:100%;}
+nav a:hover{color: #ffeb3b; transform: translateY(-4px); text-shadow:0 3px 7px rgba(255,235,59,0.7);}
+.nav-left {display: flex; align-items: center; gap: 15px;}
+.icon-box img {width: 40px; height: 40px; object-fit: contain; border-radius: 8px;}
+/* HAMBURGER BASE */
+.hamburger {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: white;
+}
+
+/* NAV-LINKS MOBILE */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: rgba(0,0,0,0.9);
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  }
+
+  .nav-links a {
+    margin: 0;
+    font-size: 1.2em;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+
+footer {
+  background: linear-gradient(135deg, #2B1A55,#4b23ad);
+  padding: 25px 40px;
+  margin-top: 40px;
+  border-radius: 12px 12px 0 0;
+  color: #CO6C84;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  border: 2px solid #C06C84; /* Rose glowing border */
+  box-shadow: 0 0 12px rgba(192,108,132,0.7);
+}
+
+footer .footer-left {
+  flex: 70%;
+  padding-right: 20px;
+  border-right: 2px solid #FFD166; /* vivid gold divider */
+}
+
+footer .footer-right {
+  flex: 30%;
+  text-align: right;
+  padding-left: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+}
+
+footer .footer-right a {
+  color: #FFD166; /* Gold links */
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+footer .footer-right a:hover {
+  color: #FFFFFF; /* White on hover */
+}
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  footer .footer-left {
+    border-right: none;   /* remove divider on small screens */
+    border-bottom: 2px solid #FFD166; /* optional: horizontal divider */
+    padding: 10px 0;
+  }
+
+  footer .footer-right {
+    justify-content: center;
+    margin-top: 15px;
+    padding-left: 0;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+</style>
+</head>
+<body>
+
+
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <div class="icon-box">
+      <img src="ecosmart.jpg" alt="EcoSmart Icon">
+    </div>
+    <div class="logo">EcoSmart</div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+ 
+<a href="all-products.html">All Products</a>
+<a href="#As">Accesibility Statement</a>
+    <a href="Aboutus.html" Target="_self"> About Us </a>
+  
+  </div>
+<div class="hamburger" onclick="toggleMenu()">
+  ☰
+</div>
+
+</nav>
+<section id="As">
+  <h2>Accessibility Statement - EcoSmart</h2>
+
+  <p>EcoSmart is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards.</p>
+
+  <h3>1. Conformance Status</h3>
+  <p>The Web Content Accessibility Guidelines (WCAG) defines requirements for designers and developers to improve accessibility for people with disabilities. Our website strives to conform to <strong>WCAG 2.1, Level AA</strong>.</p>
+
+  <h3>2. Measures to Support Accessibility</h3>
+  <ul>
+    <li>Accessibility is considered in all new content and features.</li>
+    <li>Regular testing is conducted using automated tools and manual checks.</li>
+    <li>Staff are trained on digital accessibility best practices.</li>
+  </ul>
+
+  <h3>3. Feedback</h3>
+  <p>We welcome your feedback on the accessibility of EcoSmart. If you encounter accessibility barriers, please contact us:</p>
+  <ul>
+    <li>Email: <a href="mailto:kanishklahoti9@gmail.com">kanishklahoti9@gmail.com</a></li>
+    <li>Phone: +91-9920190050</li>
+    <li>Mailing Address: EcoSmart, Mumbai, India</li>
+  </ul>
+  <p>We try to respond to feedback within 2 business days.</p>
+
+  <h3>4. Technical Specifications</h3>
+  <p>The accessibility of EcoSmart relies on the following technologies to work with the particular combination of web browser and any assistive technologies or plugins installed on your computer:</p>
+  <ul>
+    <li>HTML5</li>
+    <li>CSS3</li>
+    <li>JavaScript</li>
+    <li>ARIA (Accessible Rich Internet Applications) landmarks and roles</li>
+  </ul>
+
+  <h3>5. Limitations and Alternatives</h3>
+  <p>Despite our best efforts, some content may not yet be fully accessible. Examples include:</p>
+  <ul>
+    <li>Third-party embedded content that may not meet accessibility standards.</li>
+    <li>Complex data visualizations or charts.</li>
+    <li>Uploaded documents (PDFs, DOCX) that are not fully accessible.</li>
+  </ul>
+  <p>We are actively working to improve accessibility across all content. If you encounter barriers, please use our feedback channels above.</p>
+
+  <h3>6. Compatibility with Browsers and Assistive Technology</h3>
+  <p>EcoSmart is designed to be compatible with the latest versions of major browsers such as Chrome, Firefox, Safari, and Edge. It also supports common assistive technologies including screen readers, magnifiers, and keyboard navigation.</p>
+
+  <h3>7. Ongoing Efforts</h3>
+  <p>EcoSmart is committed to:</p>
+  <ul>
+    <li>Regularly auditing our website for accessibility compliance.</li>
+    <li>Providing training for our developers and content creators.</li>
+    <li>Incorporating accessibility into all future website updates and features.</li>
+  </ul>
+
+  <h3>8. Legal Compliance</h3>
+  <p>This accessibility statement is part of our commitment to comply with national and international accessibility laws, including:</p>
+  <ul>
+    <li>The Rights of Persons with Disabilities Act, India (2016)</li>
+    <li>Web Content Accessibility Guidelines (WCAG 2.1)</li>
+    <li>Other applicable accessibility regulations</li>
+  </ul>
+
+  <h3>9. Contact</h3>
+  <p>If you have any questions or concerns about accessibility, please contact us at:</p>
+  <ul>
+    <li>Email: <a href="mailto:kanishklahoti9@gmail.com">kanishklahoti9@gmail.com</a></li>
+    <li>Phone: +91-9920190050</li>
+    <li>Mailing Address: EcoSmart, Bangalore, India</li>
+  </ul>
+
+  <p>We value your feedback and are committed to ensuring that EcoSmart is accessible to all users.</p>
+</section>
+
+<footer>
+  <div class="footer-left">
+    © 2025 EcoSmart | All Rights Reserved| 
+    Contact: +91 9920190050 <BR>Email: kanishklahoti9@gmail.com
+  </div>
+  <div class="footer-right">
+    <a href="pp.html" target="_blank">Privacy Policy</a><br>
+    <a href="tc.html" target="_blank">Terms and Conditions</a><br>
+    <a href="as.html" target="_blank">Accessibility Statement</a>
+  </div>
+</footer>
+</body>
+</html>

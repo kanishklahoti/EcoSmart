@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - EcoSmart</title>
+<style>
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Arial',sans-serif;scroll-behavior:smooth;}
+body{overflow-x:hidden;background:#111;color:#fff;line-height:1.6;}
+a{text-decoration:none;}
+
+/* GRADIENT ANIMATIONS */
+@keyframes gradientBG1{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%;}}
+@keyframes gradientBG2{0%{background-position:0% 60%}50%{background-position:100% 40%}100%{background-position:0% 60%;}}
+@keyframes gradientBG3{0%{background-position:50% 0%}50%{background-position:50% 100%}100%{background-position:50% 0%;}}
+@keyframes gradientBG4{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%;}}
+@keyframes gradientBG5{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%;}}
+@keyframes gradientBG6{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%;}}
+@keyframes gradientBG7{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%;}}
+@keyframes gradientBG8{0%{background-position:50% 0%}50%{background-position:50% 100%}100%{background-position:50% 0%;}}
+@keyframes teamGradient{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+
+/* NAVIGATION */
+nav{position:sticky;top:0;z-index:999;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);
+display:flex;justify-content:space-between;align-items:center;padding:20px 60px;border-bottom:2px solid transparent;
+border-image:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc) 1;box-shadow:0 15px 25px rgba(0,0,0,0.3);}
+nav .logo{font-size:1.8em;font-weight:bold;background:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav a{color:white;margin-left:25px;font-weight:bold;position:relative;transition: all 0.3s ease;}
+nav a::after{content:"";position:absolute;width:0;height:2px;bottom:-3px;left:0;
+background:linear-gradient(90deg,#ff512f,#dd2476,#36d1dc);transition:0.5s;}
+nav a:hover::after{width:100%;}
+nav a:hover{color: #ffeb3b; transform: translateY(-4px); text-shadow:0 3px 7px rgba(255,235,59,0.7);}
+.nav-left {display:flex;align-items:center;gap:15px;}
+.icon-box img {width:40px;height:40px;object-fit:contain;border-radius:8px;}
+/* HAMBURGER BASE */
+.hamburger {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: white;
+}
+
+/* NAV-LINKS MOBILE */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: rgba(0,0,0,0.9);
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  }
+
+  .nav-links a {
+    margin: 0;
+    font-size: 1.2em;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* SECTION BASE */
+section{padding:80px 20px;text-align:center;border-radius:20px;overflow:hidden;margin-bottom:50px;transition: transform 1s ease-out;}
+section h2{font-size:2.5em;margin-bottom:20px;background:linear-gradient(90deg,#ff512f,#dd2476,#36d1dc,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* UNIQUE GRADIENT SECTIONS */
+.gradient1{background:linear-gradient(270deg,#ff6a00,#ee0979,#36d1dc,#6a11cb,#ff512f);background-size:800% 800%;animation:gradientBG1 15s ease infinite;}
+.gradient2{background:linear-gradient(270deg,#00f260,#0575e6,#f7971e,#ffd200,#f00000);background-size:800% 800%;animation:gradientBG2 15s ease infinite;}
+.gradient3{background:linear-gradient(270deg,#6a11cb,#2575fc,#ff6a00,#ee0979);background-size:800% 800%;animation:gradientBG3 15s ease infinite;}
+.gradient4{background:linear-gradient(270deg,#ff4b1f,#ff9068,#00c6ff,#0072ff);background-size:800% 800%;animation:gradientBG4 15s ease infinite;}
+.gradient5{background:linear-gradient(270deg,#ff512f,#dd2476,#36d1dc,#ffeb3b);background-size:800% 800%;animation:gradientBG5 15s ease infinite;}
+.gradient6{background:linear-gradient(270deg,#f7971e,#ffd200,#6a11cb,#2575fc);background-size:800% 800%;animation:gradientBG6 15s ease infinite;}
+.gradient7{background:linear-gradient(270deg,#00c6ff,#0072ff,#f00000,#ff8c00);background-size:800% 800%;animation:gradientBG7 15s ease infinite;}
+.gradient8{background:linear-gradient(270deg,#ff5e62,#ff9966,#00f260,#0575e6);background-size:800% 800%;animation:gradientBG8 15s ease infinite;}
+
+/* ICON BOXES */
+.icon-boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-top:30px;}
+.icon-boxes .box{background:rgba(255,255,255,0.08);padding:20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.3);}
+.icon-boxes .box h3{margin-bottom:10px;background:linear-gradient(90deg,#ffeb3b,#ff4081,#36d1dc,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.icon-boxes .box p{font-size:1em;}
+
+/* TEAM */
+.team-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;margin-top:30px;}
+.team-member{
+  background: linear-gradient(270deg,#ff6a00,#ee0979,#36d1dc,#6a11cb,#ff512f);
+  background-size: 800% 800%;
+  animation: teamGradient 20s ease infinite;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.team-member:hover{
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+}
+.team-member img{width:100%;border-radius:15px;margin-bottom:15px;}
+.team-member h4{margin-bottom:5px;}
+.team-member p{font-size:0.95em;color:#ddd;}
+#team h2{
+  background: linear-gradient(270deg,#ff6a00,#ee0979,#36d1dc,#6a11cb,#ff512f);
+  background-size: 800% 800%;
+  animation: teamGradient 15s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* CTA BUTTONS */
+.btn{padding:15px 35px;font-size:1.2em;border:none;border-radius:50px;cursor:pointer;
+background:linear-gradient(90deg,#ff512f,#dd2476);color:white;margin:10px;display:inline-block;
+box-shadow:0 5px 15px rgba(255,81,47,0.4);transition:0.3s;}
+.btn:hover{transform: scale(1.05) translateY(-2px); box-shadow:0 12px 35px rgba(255,81,47,0.6);}
+
+/* CONTACT & INVESTOR FORM */
+.contact form,.investor-form{max-width:600px;margin:auto;display:flex;flex-direction:column;gap:15px;}
+.contact input,.contact textarea,.investor-form input,.investor-form textarea{padding:15px;border-radius:12px;border:none;}
+.contact button,.investor-form button{padding:15px;border-radius:50px;background:linear-gradient(90deg,#ff512f,#dd2476);color:white;font-weight:bold;cursor:pointer;}
+
+footer {
+  background: linear-gradient(135deg, #2B1A55,#4b23ad);
+  padding: 25px 40px;
+  margin-top: 40px;
+  border-radius: 12px 12px 0 0;
+  color: #CO6C84;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  border: 2px solid #C06C84; /* Rose glowing border */
+  box-shadow: 0 0 12px rgba(192,108,132,0.7);
+}
+
+footer .footer-left {
+  flex: 70%;
+  padding-right: 20px;
+  border-right: 2px solid #FFD166; /* vivid gold divider */
+}
+
+footer .footer-right {
+  flex: 30%;
+  text-align: right;
+  padding-left: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+}
+
+footer .footer-right a {
+  color: #FFD166; /* Gold links */
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+footer .footer-right a:hover {
+  color: #FFFFFF; /* White on hover */
+}
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  footer .footer-left {
+    border-right: none;   /* remove divider on small screens */
+    border-bottom: 2px solid #FFD166; /* optional: horizontal divider */
+    padding: 10px 0;
+  }
+
+  footer .footer-right {
+    justify-content: center;
+    margin-top: 15px;
+    padding-left: 0;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+
+
+
+/* TIMELINE */
+.timeline-container{max-width:900px;margin:auto;text-align:left;}
+.timeline-event{background:rgba(255,255,255,0.08);padding:15px 20px;margin:10px 0;border-radius:12px;}
+
+/* STATS */
+.stats-container{display:flex;justify-content:center;gap:40px;margin-top:30px;}
+.stat-box{background:rgba(255,255,255,0.08);padding:20px;border-radius:15px;width:180px;box-shadow:0 8px 20px rgba(0,0,0,0.3);}
+.stat-box h3{font-size:2em;margin-bottom:10px;}
+
+/* TESTIMONIALS */
+.testimonial-container{max-width:800px;margin:auto;position:relative;}
+.testimonial-slide{display:none;animation:fade 1s;}
+.testimonial-slide.active{display:block;}
+@keyframes fade{0%{opacity:0}100%{opacity:1}}
+
+/* FADE CHILD */
+.fade-child { opacity:0; transform: translateY(20px); transition: opacity 700ms cubic-bezier(.2,.9,.2,1), transform 700ms cubic-bezier(.2,.9,.2,1);}
+.fade-child.show{ opacity:1; transform: translateY(0);}
+</style>
+</head>
+<body class="no-js">
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-left">
+    <div class="icon-box"><img src="ecosmart.jpg" alt="EcoSmart Icon"></div>
+    <div class="logo">EcoSmart</div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="#brand-story">About</a>
+    <a href="#vision">Vision & Values</a>
+    <a href="#team">Team</a>
+    <a href="#usp">What We Offer</a>
+    <a href="#promise">Why Choose Us</a>
+    <a href="#investors">Investors</a>
+    <a href="#contact">Contact</a>
+  </div>
+<div class="hamburger" onclick="toggleMenu()">
+  ☰
+</div>
+</nav>
+
+<!-- BRAND STORY -->
+<section id="brand-story" class="gradient1 fade-child">
+  <h2>Our Brand Story</h2>
+  <p>Founded in July 2025, EcoSmart is dedicated to creating innovative, eco-friendly solutions for every home. We believe sustainability should never compromise style or convenience. Our journey began with a small team passionate about green living, and today we’ve reached thousands of homes worldwide.</p>
+</section>
+
+<!-- VISION & VALUES -->
+<section id="vision" class="gradient2 fade-child">
+  <h2>Vision & Values</h2>
+  <p>Vision: A world where every home thrives sustainably.</p>
+  <div class="icon-boxes">
+    <div class="box"><h3>🌱 Sustainability</h3><p>Eco-friendly practices in everything we do.</p></div>
+    <div class="box"><h3>⚡ Innovation</h3><p>Smart solutions that improve everyday life.</p></div>
+    <div class="box"><h3>💎 Quality</h3><p>Premium, durable, and reliable products.</p></div>
+    <div class="box"><h3>🤝 Trust</h3><p>Transparent and honest customer relations.</p></div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team" class="gradient3 fade-child">
+  <h2>Meet The Team</h2>
+  <div class="team-container">
+    <div class="team-member">
+      <img src="kanishk.jpg" alt="">
+      <h4>Kanishk - Founder and CEO</h4>
+      <p>Eco-enthusiast, loves smart homes and green energy.</p>
+    </div>
+    <div class="team-member">
+      <img src="krisha.jpg" height="410px"alt="">
+      <h4>Krisha- CTO</h4>
+      <p>Tech wizard designing sustainable smart devices.</p>
+    </div>
+    <div class="team-member">
+      <img src="naman.jpg" height="410px"alt="">
+      <h4>Naman - CFO</h4>
+      <p>Strategically manages finances.</p>
+    </div>
+    <div class="team-member">
+      <img src="ishika.jpg" height="410px"alt="">
+      <h4>Ishika - Design Head</h4>
+      <p>Passionate about combining style with sustainability.</p>
+    </div>
+  </div>
+</section>
+<!-- USP -->
+<section id="usp" class="gradient4 fade-child">
+  <h2>What We Offer</h2>
+  <div class="icon-boxes">
+    <div class="box"><h3>🌿 Eco-Friendly Materials</h3><p>Products made from sustainable resources.</p></div>
+    <div class="box"><h3>💡 Smart Technology</h3><p>Innovative IoT-enabled solutions for your home.</p></div>
+    <div class="box"><h3>🎨 Premium Design</h3><p>Sleek, modern, and functional aesthetics.</p></div>
+    <div class="box"><h3>♻ User-Friendly Solutions</h3><p>Making sustainable living simple for everyone.</p></div>
+  </div>
+</section>
+
+<!-- CUSTOMER PROMISE -->
+<section id="promise" class="gradient5 fade-child">
+  <h2>Why Choose Us</h2>
+  <div class="icon-boxes">
+    <div class="box"><h3>✅ 100% Eco-Friendly</h3><p>We commit to sustainability in all products.</p></div>
+    <div class="box"><h3>💎 High Quality</h3><p>Durable and reliable smart solutions.</p></div>
+    <div class="box"><h3>🤝 Exceptional Service</h3><p>Customer satisfaction is our top priority.</p></div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section id="testimonials" class="gradient6 fade-child">
+  <h2>Our Happy Customers</h2>
+  <div class="testimonial-container">
+    <div class="testimonial-slide active">
+      <p>"EcoSmart products transformed my home! Energy-efficient and stylish."</p>
+      <p>- Ananya</p>
+    </div>
+    <div class="testimonial-slide">
+      <p>"I love the smart tech combined with eco-conscious design."</p>
+      <p>- Rohit</p>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTORS -->
+<section id="investors" class="gradient7 fade-child">
+  <h2>Our Investors</h2>
+  <div class="icon-boxes">
+    <div class="box"><h3>GreenFuture Capital</h3><p>Supporting sustainable innovations globally.</p></div>
+    <div class="box"><h3>EcoVentures</h3><p>Investing in eco-conscious startups.</p></div>
+    <div class="box"><h3>Sunrise Impact Fund</h3><p>Backing green tech for a better tomorrow.</p></div>
+  </div>
+<br>
+  <h2>Want to be an Investor?</h2>
+  <form class="investor-form">
+    <input type="text" placeholder="Full Name" required>
+    <input type="email" placeholder="Email" required>
+    <textarea placeholder="Your Message" rows="4" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</section>
+
+<!-- TIMELINE / MILESTONES -->
+<section id="timeline" class="gradient8 fade-child">
+  <h2>Our Journey</h2>
+  <div class="timeline-container">
+    <div class="timeline-event"><strong>June 2025:</strong> Founded EcoSmart.</div>
+    <div class="timeline-event"><strong>July 2025:</strong> Launched first smart eco-product.</div>
+    <div class="timeline-event"><strong>August 2025:</strong> Expanded to international markets.</div>
+    <div class="timeline-event"><strong>September 2025:</strong> Reached 10,000+ sustainable homes.</div>
+    <div class="timeline-event"><strong>October 2025:</strong> Introduced AI-driven eco solutions.</div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-box"><h3>10K+</h3><p>Homes Transformed</p></div>
+    <div class="stat-box"><h3>500+</h3><p>Products Sold</p></div>
+    <div class="stat-box"><h3>98%</h3><p>Customer Satisfaction</p></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="gradient1 fade-child">
+  <h2>Explore Our Products</h2>
+  <a href="all-products.html" class="btn">See All Products</a>
+  <a href="#contact" class="btn">Get in Touch</a>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="gradient2 fade-child contact">
+  <h2>Contact Us</h2>
+  <form action="https://formspree.io/f/xqaybodj" method="POST">
+    <input type="text" name="firstName" placeholder="First Name" required>
+    <input type="text" name="lastName" placeholder="Last Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</section>
+
+<footer>
+  <div class="footer-left">
+    © 2025 EcoSmart | All Rights Reserved| 
+    Contact: +91 9920190050 <BR>Email: kanishklahoti9@gmail.com
+
+<p style="font-size: 10px; color:#888;">
+⚠ Disclaimer: This is a demo website for project purposes only.
+    Orders, payments, and deliveries are not functional.</p>
+
+  </div>
+  <div class="footer-right">
+    <a href="pp.html" target="_blank">Privacy Policy</a><br>
+    <a href="tc.html" target="_blank">Terms and Conditions</a><br>
+    <a href="as.html" target="_blank">Accessibility Statement</a>
+  </div>
+</footer>
+
+<!-- TRANSITIONS JS -->
+<script>
+(function () {
+  const targets = Array.from(document.querySelectorAll('.fade-child'));
+  const observerOptions = { threshold: 0.12 };
+  const revealObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('show'); obs.unobserve(entry.target); } });
+  }, observerOptions);
+  targets.forEach(el => revealObserver.observe(el));
+
+  // Testimonials auto-slide
+  let index = 0;
+  const slides = document.querySelectorAll('.testimonial-slide');
+  setInterval(()=> {
+    slides.forEach(slide => slide.classList.remove('active'));
+    slides[index].classList.add('active');
+    index = (index+1)%slides.length;
+  }, 5000);
+})();
+function toggleMenu() {
+  document.querySelector(".nav-links").classList.toggle("show");
+}
+</script>
+
+</body>
+</html>

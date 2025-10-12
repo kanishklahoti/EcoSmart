@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Smart Sustainable Living</title>
+<style>
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Arial',sans-serif;scroll-behavior:smooth;}
+body{overflow-x:hidden;background:#111;color:#fff;line-height:1.6;}
+
+/* NAVIGATION */
+nav{position:sticky;top:0;z-index:999;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);
+display:flex;justify-content:space-between;align-items:center;padding:20px 60px;border-bottom:2px solid transparent;
+border-image:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc) 1;box-shadow:0 15px 25px rgba(0,0,0,0.3);}
+nav .logo{font-size:1.8em;font-weight:bold;background:linear-gradient(90deg,#ff6a00,#ee0979,#36d1dc);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav a{color:white;margin-left:25px;text-decoration:none;font-weight:bold;position:relative;transition: all 0.3s ease;}
+nav a::after{content:"";position:absolute;width:0;height:2px;bottom:-3px;left:0;
+background:linear-gradient(90deg,#ff512f,#dd2476,#36d1dc);transition:0.5s;}
+nav a:hover::after{width:100%;}
+nav a:hover{color: #ffeb3b; transform: translateY(-4px); text-shadow:0 3px 7px rgba(255,235,59,0.7);}
+.nav-left {display: flex; align-items: center; gap: 15px;}
+.icon-box img {width: 40px; height: 40px; object-fit: contain; border-radius: 8px;}
+/* HAMBURGER BASE */
+.hamburger {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: white;
+}
+
+/* NAV-LINKS MOBILE */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: rgba(0,0,0,0.9);
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  }
+
+  .nav-links a {
+    margin: 0;
+    font-size: 1.2em;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+footer {
+  background: linear-gradient(135deg, #2B1A55,#4b23ad);
+  padding: 25px 40px;
+  margin-top: 40px;
+  border-radius: 12px 12px 0 0;
+  color: #CO6C84;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  border: 2px solid #C06C84; /* Rose glowing border */
+  box-shadow: 0 0 12px rgba(192,108,132,0.7);
+}
+
+footer .footer-left {
+  flex: 70%;
+  padding-right: 20px;
+  border-right: 2px solid #FFD166; /* vivid gold divider */
+}
+
+footer .footer-right {
+  flex: 30%;
+  text-align: right;
+  padding-left: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+}
+
+footer .footer-right a {
+  color: #FFD166; /* Gold links */
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+footer .footer-right a:hover {
+  color: #FFFFFF; /* White on hover */
+}
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  footer .footer-left {
+    border-right: none;   /* remove divider on small screens */
+    border-bottom: 2px solid #FFD166; /* optional: horizontal divider */
+    padding: 10px 0;
+  }
+
+  footer .footer-right {
+    justify-content: center;
+    margin-top: 15px;
+    padding-left: 0;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+
+
+</style>
+</head>
+<body class="no-js"> 
+
+
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <div class="icon-box">
+      <img src="ecosmart.jpg" alt="EcoSmart Icon">
+    </div>
+    <div class="logo">EcoSmart</div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+<a href="all-products.html">All Products</a>
+ <a href="#Pp">Privacy Policy</a>
+    <a href="Aboutus.html" Target="_self"> About Us </a>
+  
+  </div>
+<div class="hamburger" onclick="toggleMenu()">
+  ☰
+</div>
+
+</nav>
+
+
+<section id="Pp">
+  <h2>    Privacy Policy - EcoSmart</h2>
+
+  <p>At EcoSmart, accessible at <strong>EcoSmart.com</strong>, one of our main priorities is the privacy of our visitors. This Privacy Policy explains the types of information we collect and how we use it.</p>
+
+  <h3>Contact</h3>
+  <p>If you have additional questions or require more information about our Privacy Policy, contact us at <a href="mailto:kanishklahoti9@gmail.com">kanishklahoti9@gmail.com</a>.</p>
+
+  <h3>Consent</h3>
+  <p>By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>
+
+  <h3>Information We Collect</h3>
+  <ul>
+    <li>Personal information you provide directly (name, email, phone, etc.)</li>
+    <li>Account registration info (name, company name, address, email, phone)</li>
+    <li>Content you send to us (messages, attachments)</li>
+  </ul>
+
+  <h3>How We Use Your Information</h3>
+  <ul>
+    <li>Provide, operate, and maintain our website</li>
+    <li>Improve, personalize, and expand our website</li>
+    <li>Understand and analyze usage patterns</li>
+    <li>Develop new products, services, features, and functionality</li>
+    <li>Communicate updates, promotions, and offers</li>
+    <li>Prevent fraud</li>
+  </ul>
+
+  <h3>Log Files</h3>
+  <p>EcoSmart follows a standard procedure of using log files. These include IP addresses, browser type, ISP, date/time stamps, referring/exit pages, and clicks. This helps analyze trends and track user activity. These are not linked to personal information.</p>
+
+  <h3>Cookies and Web Beacons</h3>
+  <p>Our site uses cookies to store visitor preferences and optimize experience. You may disable cookies in your browser settings.</p>
+
+  <h3>Third-Party Cookies (Google DART & Ads)</h3>
+  <p>Google and other advertisers may use cookies, JavaScript, or Web Beacons to serve ads and measure effectiveness. EcoSmart has no control over these cookies. <br>See <a href="https://policies.google.com/technologies/ads" target="_blank">Google Ads Privacy</a> for details.</p>
+
+  <h3>CCPA Privacy Policy</h3>
+  <p>California residents may request:</p>
+  <ul>
+    <li>Disclosure of personal data collected</li>
+    <li>Deletion of personal data</li>
+    <li>Opt-out of sale of personal data</li>
+  </ul>
+
+  <h3>GDPR Privacy Policy</h3>
+  <p>Users have rights under GDPR, including:</p>
+  <ul>
+    <li>Access to personal data</li>
+    <li>Rectification of inaccurate data</li>
+    <li>Erasure of personal data</li>
+    <li>Restrict processing of data</li>
+    <li>Object to processing</li>
+    <li>Data portability</li>
+  </ul>
+  <p>Requests will be responded to within one month.</p>
+
+  <h3>Children's Information</h3>
+  <p>We do not knowingly collect personal information from children under 13. Parents/guardians are encouraged to monitor their child’s online activity. If you believe your child has submitted information, contact us to remove it promptly.</p>
+</section>
+<footer>
+  <div class="footer-left">
+    © 2025 EcoSmart | All Rights Reserved| 
+    Contact: +91 9920190050 <BR>Email: kanishklahoti9@gmail.com
+  </div>
+  <div class="footer-right">
+    <a href="pp.html" target="_blank">Privacy Policy</a><br>
+    <a href="tc.html" target="_blank">Terms and Conditions</a><br>
+    <a href="as.html" target="_blank">Accessibility Statement</a>
+  </div>
+</footer>
+</body>
+</html>
