@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,8 +155,6 @@ footer .footer-right a:hover {
     gap: 12px;
   }
 }
-
-
 
 /* ------------------ */
 /* ADDED ANIMATION CSS (non-destructive) */
@@ -481,48 +477,63 @@ function toggleMenu() {
   document.querySelector(".nav-links").classList.toggle("show");
 }
 
-/* ===== POPUP: slide up from bottom to center on load ===== */
+/* ===== POPUP: slide up from bottom to center with persisted consent (localStorage) ===== */
 window.addEventListener('load', () => {
+  const CONSENT_KEY = 'ecoSmartConsent_v1';
   const overlay = document.getElementById('visitorOverlay');
   const popup = document.getElementById('visitorPopup');
   const acceptBtn = document.getElementById('acceptPopupBtn');
 
-  // show overlay & popup with stagger so animation applies
+  // If consent already given, don't show popup
+  try {
+    if (localStorage.getItem(CONSENT_KEY) === 'accepted') {
+      if (overlay) overlay.style.display = 'none';
+      if (popup) popup.style.display = 'none';
+      return;
+    }
+  } catch (err) {
+    // localStorage may be unavailable — fall back to showing popup
+    console.warn('localStorage unavailable:', err);
+  }
+
+  if (!overlay || !popup || !acceptBtn) return;
+
+  // show overlay & popup so animations can run
   overlay.style.display = 'block';
   popup.style.display = 'block';
-  // small delay to allow rendering before adding class that animates to center
-  requestAnimationFrame(() => setTimeout(() => {
-    overlay.classList.add('show');
-    popup.classList.add('show');
-    overlay.setAttribute('aria-hidden', 'false');
-    popup.setAttribute('aria-hidden', 'false');
-  }, 40));
 
-  // Accept button closes the modal
-  acceptBtn && acceptBtn.addEventListener('click', () => {
+  // tiny delay to allow paint then animate into center
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      overlay.classList.add('show');
+      popup.classList.add('show');
+      overlay.setAttribute('aria-hidden', 'false');
+      popup.setAttribute('aria-hidden', 'false');
+      // Accessibility: move focus to accept button
+      try { acceptBtn.focus({preventScroll:true}); } catch (e) {}
+    }, 30);
+  });
+
+  // Accept button: persist consent and hide with animation
+  acceptBtn.addEventListener('click', () => {
+    try { localStorage.setItem(CONSENT_KEY, 'accepted'); } catch (err) { console.warn('Cannot persist consent:', err); }
     popup.classList.remove('show');
     overlay.classList.remove('show');
-    // allow transition to finish then hide
     setTimeout(() => {
       popup.style.display = 'none';
       overlay.style.display = 'none';
       overlay.setAttribute('aria-hidden', 'true');
       popup.setAttribute('aria-hidden', 'true');
-    }, 420);
+    }, 480);
   });
 
   // Prevent overlay click from closing (require explicit consent)
-  overlay.addEventListener('click', (e) => {
-    // do nothing — forces the user to click "I Agree" or view policies
-    e.stopPropagation();
-  });
+  overlay.addEventListener('click', (e) => { e.stopPropagation(); });
 
-  // optional: allow pressing Escape to close
+  // Allow Escape to accept & close (optional)
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (popup.classList.contains('show')) {
-        acceptBtn && acceptBtn.click();
-      }
+    if (e.key === 'Escape' && popup.classList.contains('show')) {
+      acceptBtn.click();
     }
   });
 });
@@ -530,6 +541,3 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
-
-
-
