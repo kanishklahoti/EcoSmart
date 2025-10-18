@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -261,6 +262,106 @@ footer .footer-right a:hover {
   .visitor-popup { padding:16px; max-width:94%; left:50%; bottom: 26px; }
   .popup-link, .popup-accept { width: 100%; text-align:center; }
 }
+/* Chatbot Icon */
+#chatbot-icon {
+position: fixed;
+bottom: 25px;
+right: 25px;
+background-color: #2ecc71;
+color: white;
+font-size: 26px;
+padding: 12px 14px;
+border-radius: 50%;
+cursor: pointer;
+box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+z-index: 999;
+transition: transform 0.3s ease;
+}
+#chatbot-icon:hover {
+transform: scale(1.1);
+}
+
+/* Chatbot Window */
+#chatbot-window {
+position: fixed;
+bottom: 90px;
+right: 25px;
+width: 300px;
+background: #fefefe;
+border-radius: 15px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+display: none;
+flex-direction: column;
+overflow: hidden;
+z-index: 1000;
+animation: fadeIn 0.4s ease;
+}
+
+#chatbot-header {
+background: #2ecc71;
+color: white;
+padding: 10px;
+font-size: 16px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+#chatbot-messages {
+padding: 10px;
+height: 230px;
+overflow-y: auto;
+font-size: 14px;
+background-color: #f8fff8;
+}
+
+.bot-message, .user-message {
+margin: 8px 0;
+padding: 8px 12px;
+border-radius: 10px;
+display: inline-block;
+max-width: 85%;
+}
+
+.bot-message {
+background: #e3f9e5;
+color: #333;
+align-self: flex-start;
+}
+
+.user-message {
+background: #2ecc71;
+color: white;
+align-self: flex-end;
+}
+
+#chatbot-input {
+display: flex;
+border-top: 1px solid #ddd;
+}
+
+#chatbot-input input {
+flex: 1;
+border: none;
+padding: 10px;
+font-size: 14px;
+outline: none;
+}
+
+#chatbot-input button {
+background: #2ecc71;
+border: none;
+color: white;
+padding: 10px 14px;
+cursor: pointer;
+font-size: 16px;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
 </style>
 </head>
 <body class="no-js">
@@ -324,6 +425,63 @@ for(let i=0;i<50;i++){
     p.style.background = 'rgba(255,255,255,'+Math.random()+')';
     document.querySelector('.hero').appendChild(p);
 }
+</script>
+ <!-- 🌿 EcoSmart AI Chat Assistant -->  <div id="chatbot-icon">💬</div>  <div id="chatbot-window">    
+  <div id="chatbot-header">    
+    <strong>EcoSmart Assistant</strong>    
+    <span id="close-chat">✖</span>    
+  </div>    
+  <div id="chatbot-messages">    
+    <div class="bot-message">Hello! 👋 I'm your EcoSmart assistant.<br>How can I help you today?</div>    
+  </div>    
+  <div id="chatbot-input">    
+    <input type="text" id="user-input" placeholder="Type your message..." />    
+    <button id="send-btn">➤</button>    
+  </div>    
+</div>    
+<script>    
+  const chatIcon = document.getElementById("chatbot-icon");    
+  const chatWindow = document.getElementById("chatbot-window");    
+  const closeChat = document.getElementById("close-chat");    
+  const sendBtn = document.getElementById("send-btn");    
+  const userInput = document.getElementById("user-input");    
+  const chatMessages = document.getElementById("chatbot-messages");  chatIcon.onclick = () => chatWindow.style.display = "flex";  
+closeChat.onclick = () => chatWindow.style.display = "none"; 
+ const botReplies = {
+"hi": "Hello there! 🌱 How can I help you today?",
+"hello": "Hi! 👋 I'm here to help you explore EcoSmart products.",
+"products": "We offer Smart Solar Fans, Smart Waste Bins, and Automatic Plant Watering Systems and a lot more.",
+"contact": "Have More Questions?Contact us on-9920190050",
+"eco": "EcoSmart helps make sustainable living easier with smart technology",
+"sustainability": "EcoSmart helps make sustainable living easier with smart technology",
+"bye": "Goodbye! 🌿 Stay eco-smart!",
+"default": "I'm still learning 💡 — please ask about our products or sustainability!"
+};
+
+sendBtn.onclick = () => {
+const message = userInput.value.trim();
+if (message === "") return;
+
+// Display user message
+const userMsg = document.createElement("div");
+userMsg.className = "user-message";
+userMsg.textContent = message;
+chatMessages.appendChild(userMsg);
+chatMessages.scrollTop = chatMessages.scrollHeight;
+
+userInput.value = "";
+
+// Generate bot reply
+setTimeout(() => {
+const botMsg = document.createElement("div");
+botMsg.className = "bot-message";
+const reply = botReplies[message.toLowerCase()] || botReplies["default"];
+botMsg.textContent = reply;
+chatMessages.appendChild(botMsg);
+chatMessages.scrollTop = chatMessages.scrollHeight;
+}, 600);
+
+};
 </script>
 
 <!-- WHY IT MATTERS -->
