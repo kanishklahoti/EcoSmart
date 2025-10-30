@@ -17,10 +17,9 @@
 let deferredPrompt;
 
 window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault(); // Prevent the default mini-infobar
+  e.preventDefault();
   deferredPrompt = e;
 
-  // Check if user has dismissed before
   if (!localStorage.getItem("ecosmartPWAInstalled")) {
     showInstallPopup();
   }
@@ -29,23 +28,46 @@ window.addEventListener("beforeinstallprompt", (e) => {
 function showInstallPopup() {
   const popup = document.createElement("div");
   popup.innerHTML = `
-    <div style="
-      position:fixed;bottom:20px;left:20px;right:20px;
-      background:linear-gradient(90deg,#6C5B7B,#C06C84,#355C7D);
-      color:white;padding:15px 20px;border-radius:12px;
+    <div id="installBanner" style="
+      position:fixed;bottom:-150px;left:0;width:100%;
+      backdrop-filter:blur(12px);
+      background:rgba(18, 18, 18, 0.65);
+      border-top:3px solid #38ef7d;
+      color:white;padding:16px 22px;
       display:flex;justify-content:space-between;align-items:center;
-      font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.4);z-index:9999;">
-      <span>✨ Install EcoSmart for a better experience!</span>
+      font-weight:600;box-shadow:0 -5px 25px rgba(0,0,0,0.3);
+      transition:bottom 0.6s ease;z-index:99999;
+    ">
+      <span style="font-size:1em;">
+        🌿 <strong>EcoSmart</strong> — Add to your home screen for a premium experience!
+      </span>
       <div>
-        <button id="installPWA" style="background:#FFD700;color:#222;padding:6px 10px;border:none;border-radius:8px;cursor:pointer;margin-right:8px;font-weight:700;">Install</button>
-        <button id="closeInstall" style="background:none;color:white;border:none;font-size:18px;cursor:pointer;">✖</button>
+        <button id="installPWA" style="
+          background:linear-gradient(90deg,#38ef7d,#11998e);
+          color:#111;padding:8px 16px;
+          border:none;border-radius:10px;
+          cursor:pointer;margin-right:10px;
+          font-weight:700;
+          box-shadow:0 0 12px rgba(56,239,125,0.6);
+        ">Install</button>
+        <button id="closeInstall" style="
+          background:none;color:white;border:none;
+          font-size:20px;cursor:pointer;
+        ">✖</button>
       </div>
     </div>
   `;
   document.body.appendChild(popup);
 
+  // Slide up animation
+  setTimeout(() => {
+    document.getElementById("installBanner").style.bottom = "0";
+  }, 100);
+
+  // Button actions
   document.getElementById("installPWA").addEventListener("click", async () => {
-    popup.remove();
+    document.getElementById("installBanner").style.bottom = "-150px";
+    setTimeout(() => popup.remove(), 600);
     deferredPrompt.prompt();
     const choiceResult = await deferredPrompt.userChoice;
     if (choiceResult.outcome === "accepted") {
@@ -55,23 +77,23 @@ function showInstallPopup() {
   });
 
   document.getElementById("closeInstall").addEventListener("click", () => {
-    popup.remove();
+    document.getElementById("installBanner").style.bottom = "-150px";
+    setTimeout(() => popup.remove(), 600);
     localStorage.setItem("ecosmartPWAInstalled", "dismissed");
   });
 }
 
-// Reset install flag if app is uninstalled
+// When installed
 window.addEventListener("appinstalled", () => {
   console.log("EcoSmart installed");
   localStorage.setItem("ecosmartPWAInstalled", "true");
 });
 
-// If user uninstalls later, clear flag next visit
+// Reset if reopened from browser (after uninstall)
 if (window.matchMedia('(display-mode: browser)').matches) {
   localStorage.removeItem("ecosmartPWAInstalled");
 }
 </script>
-
 
 <style>
 /* RESET */
@@ -993,6 +1015,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
