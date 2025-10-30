@@ -1,0 +1,21 @@
+{
+  "name": "EcoSmart",
+  "short_name": "EcoSmart",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1B1B2F",
+  "theme_color": "#6C5B7B",
+  "description": "Smart Sustainable Living – Eco-friendly technology products for modern homes.",
+  "icons": [
+    {
+      "src": "ecosmart.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "ecosmart.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
