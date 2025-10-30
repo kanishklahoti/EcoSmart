@@ -13,87 +13,7 @@
       .catch((err) => console.log("SW Registration Failed", err));
   }
 </script>
-  <script>
-let deferredPrompt;
 
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-
-  if (!localStorage.getItem("ecosmartPWAInstalled")) {
-    showInstallPopup();
-  }
-});
-
-function showInstallPopup() {
-  const popup = document.createElement("div");
-  popup.innerHTML = `
-    <div id="installBanner" style="
-      position:fixed;bottom:-150px;left:0;width:100%;
-      backdrop-filter:blur(12px);
-      background:rgba(18, 18, 18, 0.65);
-      border-top:3px solid #38ef7d;
-      color:white;padding:16px 22px;
-      display:flex;justify-content:space-between;align-items:center;
-      font-weight:600;box-shadow:0 -5px 25px rgba(0,0,0,0.3);
-      transition:bottom 0.6s ease;z-index:99999;
-    ">
-      <span style="font-size:1em;">
-        🌿 <strong>EcoSmart</strong> — Add to your home screen for a premium experience!
-      </span>
-      <div>
-        <button id="installPWA" style="
-          background:linear-gradient(90deg,#38ef7d,#11998e);
-          color:#111;padding:8px 16px;
-          border:none;border-radius:10px;
-          cursor:pointer;margin-right:10px;
-          font-weight:700;
-          box-shadow:0 0 12px rgba(56,239,125,0.6);
-        ">Install</button>
-        <button id="closeInstall" style="
-          background:none;color:white;border:none;
-          font-size:20px;cursor:pointer;
-        ">✖</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(popup);
-
-  // Slide up animation
-  setTimeout(() => {
-    document.getElementById("installBanner").style.bottom = "0";
-  }, 100);
-
-  // Button actions
-  document.getElementById("installPWA").addEventListener("click", async () => {
-    document.getElementById("installBanner").style.bottom = "-150px";
-    setTimeout(() => popup.remove(), 600);
-    deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
-    if (choiceResult.outcome === "accepted") {
-      localStorage.setItem("ecosmartPWAInstalled", "true");
-    }
-    deferredPrompt = null;
-  });
-
-  document.getElementById("closeInstall").addEventListener("click", () => {
-    document.getElementById("installBanner").style.bottom = "-150px";
-    setTimeout(() => popup.remove(), 600);
-    localStorage.setItem("ecosmartPWAInstalled", "dismissed");
-  });
-}
-
-// When installed
-window.addEventListener("appinstalled", () => {
-  console.log("EcoSmart installed");
-  localStorage.setItem("ecosmartPWAInstalled", "true");
-});
-
-// Reset if reopened from browser (after uninstall)
-if (window.matchMedia('(display-mode: browser)').matches) {
-  localStorage.removeItem("ecosmartPWAInstalled");
-}
-</script>
 
 <style>
 /* RESET */
@@ -1015,6 +935,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
