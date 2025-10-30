@@ -393,63 +393,256 @@ footer .footer-right a:hover {
     <div class="box"><h3>♻ User-Friendly Solutions</h3><p>Making sustainable living simple for everyone.</p></div>
   </div>
 </section>
-   <!-- 🌿 EcoSmart AI Chat Assistant -->  <div id="chatbot-icon">💬</div>  <div id="chatbot-window">    
-  <div id="chatbot-header">    
-    <strong>EcoSmart Assistant</strong>    
-    <span id="close-chat">✖</span>    
-  </div>    
-  <div id="chatbot-messages">    
-    <div class="bot-message">Hello! 👋 I'm your EcoSmart assistant.<br>How can I help you today?</div>    
-  </div>    
-  <div id="chatbot-input">    
-    <input type="text" id="user-input" placeholder="Type your message..." />    
-    <button id="send-btn">➤</button>    
-  </div>    
-</div>    
-<script>    
-  const chatIcon = document.getElementById("chatbot-icon");    
-  const chatWindow = document.getElementById("chatbot-window");    
-  const closeChat = document.getElementById("close-chat");    
-  const sendBtn = document.getElementById("send-btn");    
-  const userInput = document.getElementById("user-input");    
-  const chatMessages = document.getElementById("chatbot-messages");  chatIcon.onclick = () => chatWindow.style.display = "flex";  
-closeChat.onclick = () => chatWindow.style.display = "none"; 
- const botReplies = {
-"hi": "Hello there! 🌱 How can I help you today?",
-"hello": "Hi! 👋 I'm here to help you explore EcoSmart products.",
-"products": "We offer Smart Solar Fans, Smart Waste Bins, and Automatic Plant Watering Systems and a lot more.",
-"how to become an investor": "Want to be an investor? Pls fill the form inputs and submit we will respond shortly", 
-"contact details": "Have More Questions?Contact us on-9920190050",
-"eco": "EcoSmart helps make sustainable living easier with smart technology",
-"sustainability": "EcoSmart helps make sustainable living easier with smart technology",
-"bye": "Goodbye! 🌿 Stay eco-smart!",
-"default": "I'm still learning 💡 — please ask about our products, sustainability or contact details!"
+ <!-- 🌿 EcoSmart AI Chat Assistant -->
+<div id="chatbot-icon" role="button" aria-label="Open EcoSmart Assistant">💬</div>
+
+<div id="chatbot-window" role="dialog" aria-modal="false" aria-label="EcoSmart Assistant">
+  <div id="chatbot-header">
+    <div>
+      <strong>EcoSmart Assistant</strong>
+      <div style="font-size:11px"><small>Ask about products, contact, or policies</small></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="minimize-chat" title="Minimize" style="background:transparent;border:none;color:white;font-size:18px;cursor:pointer">—</button>
+      <button id="close-chat" title="Close" style="background:transparent;border:none;color:white;font-size:18px;cursor:pointer">✖</button>
+    </div>
+  </div>
+
+  <!-- quick suggestion chips -->
+  <div id="chatbot-chips" aria-hidden="false">
+    <div class="chip" data-msg="Why it matters">Why it matters</div>
+    <div class="chip" data-msg="Why choose us">Why choose us</div>
+    <div class="chip" data-msg="Contact details">Contact</div>
+    <div class="chip" data-msg="See all products">See all products</div>
+    <div class="chip" data-msg="Privacy Policy">Privacy Policy</div>
+    <div class="chip" data-msg="Terms and Conditions">Terms & Conditions</div>
+    <div class="chip" data-msg="About us">About Us</div>
+  </div>
+
+  <div id="chatbot-messages" aria-live="polite">
+    <div class="bot-message">Hello! 👋 I'm your EcoSmart assistant.<br>Tap a suggestion or type a question — you can also use voice. </div>
+  </div>
+
+  <div id="chatbot-input">
+    <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" />
+    <button id="voice-btn" title="Record voice" aria-label="Start voice input">🎤</button>
+    <button id="send-btn" title="Send message" aria-label="Send message">➤</button>
+  </div>
+</div>
+
+<script>
+/* Chatbot logic, voice integration, TTS, quick chips, improved toggle behavior, and accessibility */
+
+/* Elements */
+const chatIcon = document.getElementById("chatbot-icon");
+const chatWindow = document.getElementById("chatbot-window");
+const closeChat = document.getElementById("close-chat");
+const minimizeChat = document.getElementById("minimize-chat");
+const sendBtn = document.getElementById("send-btn");
+const userInput = document.getElementById("user-input");
+const chatMessages = document.getElementById("chatbot-messages");
+const voiceBtn = document.getElementById("voice-btn");
+const chips = document.querySelectorAll('.chip');
+
+/* Utility: append message */
+function appendMessage(text, who='bot') {
+  const el = document.createElement('div');
+  el.className = who === 'bot' ? 'bot-message' : 'user-message';
+  // allow line breaks
+  el.innerHTML = text.replace(/\n/g,'<br>');
+  chatMessages.appendChild(el);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return el;
+}
+
+/* Basic bot replies (expandable) */
+const botReplies = {
+  "hi": "Hello there! 🌱 How can I help you today?",
+  "hello": "Hi! 👋 I'm here to help you explore EcoSmart products.",
+  "products": "We offer Smart Solar Fans, Smart Waste Bins, Automatic Plant Watering Systems and more. Click 'See all products' to browse.",
+  "see all products": "Click here to view all products: <a href='all-products.html' style='color:#0b3a16;font-weight:800;'>All Products</a>",
+  "why it matters": "Smart sustainable tech reduces energy use, lowers bills, and helps the planet — small changes compound into large impact.",
+  "why choose us": "Premium materials, AI integrations, and tested energy savings. We focus on durability and sustainability.",
+  "contact": "You can reach us at +91 83691 25079 or email: kanishklahoti9@gmail.com",
+  "how to become an investor": "Want to be an investor? Pls fill the form inputs and submit we will respond shortly", 
+  "contact details": "You can reach us at +91 83691 25079 or email: kanishklahoti9@gmail.com",
+  "privacy policy": "Our Privacy Policy is available here: <a href='pp.html' style='color:#0b3a16;font-weight:800;'>Privacy Policy</a>",
+  "terms and conditions": "Read our Terms & Conditions: <a href='tc.html' style='color:#0b3a16;font-weight:800;'>Terms & Conditions</a>",
+  "about us": "Learn about EcoSmart on our About page: <a href='Aboutus.html' style='color:#0b3a16;font-weight:800;'>About Us</a>",
+  "accessibility": "We aim to keep the site accessible — please contact us if you need help accessing content.",
+  "eco": "EcoSmart helps make sustainable living easier with smart technology.",
+  "sustainability": "Sustainability is at our core — we design products to minimize carbon footprint.",
+  "bye": "Goodbye! 🌿 Stay eco-smart!",
+  "default": "I'm still learning 💡 — try asking about products, contact details, or policies. You can also tap the suggestions above."
 };
 
-sendBtn.onclick = () => {
-const message = userInput.value.trim();
-if (message === "") return;
+/* TTS for bot messages (ultra-premium touch) */
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    const utter = new SpeechSynthesisUtterance(text.replace(/<[^>]*>?/gm, '')); // strip html
+    utter.lang = 'en-US';
+    utter.rate = 1;
+    utter.pitch = 1;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+  } catch (e) {
+    console.warn('TTS failed', e);
+  }
+}
 
-// Display user message
-const userMsg = document.createElement("div");
-userMsg.className = "user-message";
-userMsg.textContent = message;
-chatMessages.appendChild(userMsg);
-chatMessages.scrollTop = chatMessages.scrollHeight;
+/* process query */
+function processMessage(raw) {
+  const message = raw.trim();
+  if (!message) return;
+  // display user
+  appendMessage(escapeHtml(message), 'user');
+  // compute reply key
+  const key = message.toLowerCase().replace(/[?!.]*/g,'').trim();
+  let reply = botReplies[key] || botReplies["default"];
+  // Append reply
+  setTimeout(()=> {
+    const el = appendMessage(reply, 'bot');
+    // speak the response (voice)
+    speak(typeof reply === 'string' ? reply : '');
+    // if reply contains a link we want to add small focusable control behavior (no need here)
+  }, 450);
+}
 
-userInput.value = "";
+/* helper to escape but allow limited html for links in replies */
+function escapeHtml(str){
+  // allow <a> tags (we will trust our own replies); for user text, escape everything
+  const tmp = document.createElement('div');
+  tmp.textContent = str;
+  return tmp.innerHTML;
+}
 
-// Generate bot reply
-setTimeout(() => {
-const botMsg = document.createElement("div");
-botMsg.className = "bot-message";
-const reply = botReplies[message.toLowerCase()] || botReplies["default"];
-botMsg.textContent = reply;
-chatMessages.appendChild(botMsg);
-chatMessages.scrollTop = chatMessages.scrollHeight;
-}, 600);
+/* open / close logic with focus management */
+function openChat() {
+  chatWindow.style.display = 'flex';
+  chatWindow.setAttribute('aria-modal','true');
+  userInput.focus();
+  // add small entrance message if first time
+}
+function closeChatWindow() {
+  chatWindow.style.display = 'none';
+  chatWindow.setAttribute('aria-modal','false');
+  chatIcon.focus();
+}
+function minimizeChatWindow() {
+  // minimize keeps open but reduces height (simple behavior: hide messages & chips)
+  const visible = chatMessages.style.display !== 'none';
+  if (visible) {
+    chatMessages.style.display = 'none';
+    document.getElementById('chatbot-chips').style.display = 'none';
+    document.getElementById('chatbot-input').style.display = 'none';
+    minimizeChat.textContent = '+';
+  } else {
+    chatMessages.style.display = 'flex';
+    document.getElementById('chatbot-chips').style.display = 'flex';
+    document.getElementById('chatbot-input').style.display = 'flex';
+    minimizeChat.textContent = '—';
+    userInput.focus();
+  }
+}
 
-};
+/* event hookups */
+chatIcon.addEventListener('click', ()=> {
+  const isShown = chatWindow.style.display === 'flex';
+  if (!isShown) openChat(); else closeChatWindow();
+});
+closeChat.addEventListener('click', closeChatWindow);
+minimizeChat.addEventListener('click', minimizeChatWindow);
+
+/* send on button or enter */
+sendBtn.addEventListener('click', ()=>{
+  const val = userInput.value;
+  if (!val.trim()) return;
+  processMessage(val);
+  userInput.value = '';
+});
+userInput.addEventListener('keydown', (e)=>{
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendBtn.click();
+  }
+});
+
+/* chips behavior */
+chips.forEach(c=>{
+  c.addEventListener('click', ()=> {
+    const msg = c.getAttribute('data-msg');
+    userInput.value = msg;
+    sendBtn.click();
+  });
+});
+
+/* Voice recognition (Web Speech API) and UI */
+let recognition = null;
+let listening = false;
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-IN'; // adjust to region. Use en-US if preferred.
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  recognition.onstart = () => {
+    listening = true;
+    voiceBtn.classList.add('recording');
+    voiceBtn.title = 'Listening... click to stop';
+  };
+  recognition.onend = () => {
+    listening = false;
+    voiceBtn.classList.remove('recording');
+    voiceBtn.title = 'Record voice';
+  };
+  recognition.onerror = (ev) => {
+    console.warn('Speech error', ev);
+    listening = false;
+    voiceBtn.classList.remove('recording');
+    voiceBtn.title = 'Record voice';
+  };
+  recognition.onresult = (ev) => {
+    if (!ev.results || !ev.results[0] || !ev.results[0][0]) return;
+    const transcript = ev.results[0][0].transcript;
+    // place into input and send
+    userInput.value = transcript;
+    sendBtn.click();
+  };
+
+  voiceBtn.addEventListener('click', () => {
+    try {
+      if (listening) {
+        recognition.stop();
+        return;
+      }
+      recognition.start();
+    } catch (e) {
+      console.warn('Voice start failed', e);
+    }
+  });
+} else {
+  // hide voice button for unsupported browsers
+  voiceBtn.style.display = 'none';
+}
+
+/* speak welcome on open */
+chatIcon.addEventListener('click', () => {
+  // brief welcome TTS
+  speak('Welcome to EcoSmart. Ask about products, contact details or policies.');
+});
+
+/* Accessibility: close chat on Escape when focused inside */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (chatWindow.style.display === 'flex') closeChatWindow();
+  }
+});
+
+/* Small helper to auto-open chat once consent given (optional) - keep unobtrusive */
+/* End Chatbot script */
 </script>
 
 <!-- CUSTOMER PROMISE -->
@@ -575,6 +768,7 @@ function toggleMenu() {
 
 </body>
 </html>
+
 
 
 
