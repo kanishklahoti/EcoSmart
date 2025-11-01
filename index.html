@@ -1467,7 +1467,7 @@ function showLoadingAndLoad(email) {
 
     // translate track so the active card stays centered-ish
     const translateX = -index * step;
-    track.style.transform = translateX(${translateX}px);
+    track.style.transform = 'translateX(${translateX}px)';
 
     // update facts
     factIndexLocal = (factIndexLocal + 1) % placeholderFacts.length;
@@ -1535,4 +1535,5 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
 
