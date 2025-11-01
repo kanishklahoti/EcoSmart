@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -931,8 +932,156 @@ window.addEventListener('load', () => {
 });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+emailjs.init("gIO73_6-evFQpi5nl"); // your EmailJS public key
+
+document.addEventListener('DOMContentLoaded', () => {
+  const authPopup = document.getElementById('authPopup');
+  const loginBtn = document.getElementById('loginBtn');
+  const signupBtn = document.getElementById('signupBtn');
+  const sendCodeBtn = document.getElementById('sendCodeBtn');
+  const emailInput = document.getElementById('emailInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const verifyCodeInput = document.getElementById('verifyCodeInput');
+  const authTitle = document.getElementById('authTitle');
+  const authSubtitle = document.getElementById('authSubtitle');
+  const viewBtn = document.getElementById('viewBtn'); // NEW
+
+  // Show popup only if user not logged in
+  if (!localStorage.getItem('ecoUser')) {
+    authPopup.style.display = 'flex';
+  }
+
+  let verificationCode = null;
+
+  // Switch to signup mode
+  signupBtn.addEventListener('click', () => {
+    authTitle.textContent = "Create Your Account";
+    authSubtitle.textContent = "Enter your email, password & get verification code";
+    verifyCodeInput.style.display = 'none';
+    sendCodeBtn.style.display = 'inline-block';
+    loginBtn.textContent = 'Sign Up';
+    signupBtn.style.display = 'none';
+  });
+
+  // Send verification code
+  sendCodeBtn.addEventListener('click', () => {
+    const email = emailInput.value.trim();
+
+    if (!email) {
+      alert("Please enter your email first.");
+      return;
+    }
+
+    verificationCode = Math.floor(100000 + Math.random() * 900000);
+
+    const params = {
+      to_email: email,
+      verification_code: verificationCode
+    };
+
+    emailjs.send("service_e0pxoa8", "template_blpec5p", params)
+      .then(() => {
+        alert("✅ Verification code sent to your email!");
+        verifyCodeInput.style.display = 'block';
+        sendCodeBtn.style.display = 'none';
+      })
+      .catch((error) => {
+        console.error("EmailJS error:", error);
+        alert("⚠ Could not send verification code. Please check EmailJS setup.");
+      });
+  });
+
+  // Login or verify code
+  loginBtn.addEventListener('click', () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+      alert("Please fill all fields.");
+      return;
+    }
+
+    // Signup verification flow
+    if (verifyCodeInput.style.display === 'block') {
+      if (verifyCodeInput.value == verificationCode) {
+        const userData = { email, password };
+        localStorage.setItem('ecoUser', JSON.stringify(userData));
+        alert("🎉 Signup complete! Welcome to EcoSmart 🌱");
+        authPopup.style.display = 'none';
+      } else {
+        alert("❌ Incorrect verification code!");
+      }
+    } 
+    // Normal login
+    else {
+      const storedUser = JSON.parse(localStorage.getItem('ecoUser'));
+      if (storedUser && storedUser.email === email && storedUser.password === password) {
+        alert("🌿 Welcome back, " + email + "!");
+        authPopup.style.display = 'none';
+      } else {
+        alert("User not found or incorrect password. Please sign up first.");
+      }
+    }
+  });
+
+  // View without login button
+  viewBtn.addEventListener('click', () => {
+    authPopup.style.display = 'none';
+    console.log('User chose to view without login');
+  });
+});
+</script>
+
+<!-- LOGIN / SIGNUP POPUP -->
+<div id="authPopup" style="
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; display: none;">
+  <div style="background: linear-gradient(135deg,#38ef7d,#11998e);
+              padding: 30px; border-radius: 18px; width: 350px;
+              box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center;
+              color: white; animation: slideUp 0.6s ease-out;">
+    <h2 id="authTitle">Welcome to EcoSmart</h2>
+    <p id="authSubtitle">Please log in to continue</p>
+    <input type="email" id="emailInput" placeholder="Email" required
+           style="width:90%;padding:10px;margin:10px 0;border:none;border-radius:8px;">
+    <input type="password" id="passwordInput" placeholder="Password" required
+           style="width:90%;padding:10px;margin:10px 0;border:none;border-radius:8px;">
+    <input type="text" id="verifyCodeInput" placeholder="Verification Code"
+           style="width:90%;padding:10px;margin:10px 0;border:none;border-radius:8px;display:none;">
+
+    <button id="loginBtn" style="padding:10px 20px;border:none;border-radius:8px;
+      background:#FFD166;color:#2B1A55;font-weight:bold;cursor:pointer;">Login</button>
+
+    <button id="signupBtn" style="padding:10px 20px;border:none;border-radius:8px;
+      background:#FFD166;color:#2B1A55;font-weight:bold;cursor:pointer;">New user? Sign Up</button>
+
+    <button id="sendCodeBtn" style="display:none;margin-top:10px;padding:10px 20px;
+      border:none;border-radius:8px;background:#FFD166;color:#2B1A55;
+      font-weight:bold;cursor:pointer;">Send Verification Code</button>
+
+    <!-- New View without login button -->
+    <button id="viewBtn" style="margin-top:10px;padding:10px 20px;border:none;
+      border-radius:8px;background:#FFD166;color:#2B1A55;font-weight:bold;cursor:pointer;">
+      View without Login
+    </button>
+  </div>
+</div>
+
+<style>
+@keyframes slideUp {
+  from { transform: translateY(100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+</style>
+
+
 </body>
 </html>
+
 
 
 
