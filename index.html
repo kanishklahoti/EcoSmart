@@ -951,13 +951,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   authPopup.style.display = 'flex';
   let verificationCode = null;
-  let resetMode = false; // for forgot password
+  let resetMode = false; // track forgot-password state
+  let signupMode = false; // track signup state
 
   // Switch to signup mode
   signupBtn.addEventListener('click', () => {
     resetMode = false;
+    signupMode = true;
     authTitle.textContent = "Create Your Account";
-    authSubtitle.textContent = "Enter your email, password & get verification code";
+    authSubtitle.textContent = "Enter your email, set a password & verify your account";
+    passwordInput.placeholder = "Set a Password";
     verifyCodeInput.style.display = 'none';
     sendCodeBtn.style.display = 'inline-block';
     loginBtn.textContent = 'Sign Up';
@@ -965,7 +968,7 @@ document.addEventListener('DOMContentLoaded', () => {
     forgotLink.style.display = 'none'; // hide forgot password in signup mode
   });
 
-  // Send verification code
+  // Send verification code (for signup or reset)
   sendCodeBtn.addEventListener('click', () => {
     const email = emailInput.value.trim();
     if (!email) { alert("Please enter your email."); return; }
@@ -1011,21 +1014,23 @@ document.addEventListener('DOMContentLoaded', () => {
       if (verifyCodeInput.value == verificationCode) {
         const userIndex = users.findIndex(u => u.email === email);
         if (userIndex !== -1) {
-          const newPassword = prompt("Enter your new password:");
-          if (newPassword && newPassword.trim() !== "") {
-            users[userIndex].password = newPassword.trim();
-            localStorage.setItem('ecoUsers', JSON.stringify(users));
-            alert("✅ Password reset successful! You can now log in.");
-            resetMode = false;
-            verifyCodeInput.style.display = 'none';
-            authTitle.textContent = "Welcome to EcoSmart";
-            authSubtitle.textContent = "Please log in to continue";
-            loginBtn.textContent = 'Login';
-            signupBtn.style.display = 'inline-block';
-            forgotLink.style.display = 'inline-block';
-          } else {
-            alert("Password cannot be empty.");
+          const newPassword = passwordInput.value.trim();
+          if (!newPassword) {
+            alert("Please set a new password.");
+            return;
           }
+          users[userIndex].password = newPassword;
+          localStorage.setItem('ecoUsers', JSON.stringify(users));
+          alert("✅ Password reset successful! You can now log in.");
+          resetMode = false;
+          passwordInput.placeholder = "Password";
+          verifyCodeInput.style.display = 'none';
+          passwordInput.value = "";
+          authTitle.textContent = "Welcome to EcoSmart";
+          authSubtitle.textContent = "Please log in to continue";
+          loginBtn.textContent = 'Login';
+          signupBtn.style.display = 'inline-block';
+          forgotLink.style.display = 'inline-block';
         }
       } else {
         alert("❌ Incorrect verification code.");
@@ -1034,7 +1039,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 🔹 Normal Signup Verification
-    if (!resetMode && verifyCodeInput.style.display === 'block') {
+    if (signupMode && verifyCodeInput.style.display === 'block') {
       if (verifyCodeInput.value == verificationCode) {
         if (users.some(u => u.email === email)) {
           alert("This email is already registered. Please log in.");
@@ -1050,7 +1055,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 🔹 Normal Login
-    else if (!resetMode) {
+    else if (!resetMode && !signupMode) {
       const user = users.find(u => u.email === email && u.password === password);
       if (user) {
         alert("🌿 Welcome back, " + email + "!");
@@ -1081,13 +1086,17 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(() => {
         alert("✅ A verification code has been sent to your email to reset your password.");
         resetMode = true;
+        signupMode = false;
         verifyCodeInput.style.display = 'block';
+        passwordInput.placeholder = "Set a New Password";
+        passwordInput.value = "";
         authTitle.textContent = "Reset Your Password";
-        authSubtitle.textContent = "Enter the verification code sent to your email";
+        authSubtitle.textContent = "Enter the verification code and set a new password";
         sendCodeBtn.style.display = 'none';
         signupBtn.style.display = 'none';
         forgotLink.style.display = 'none';
-        loginBtn.textContent = 'Verify Code';
+        loginBtn.textContent = 'Verify & Reset';
+        emailInput.value = email;
       })
       .catch((error) => {
         console.error("EmailJS error:", error);
@@ -1151,6 +1160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </style>
 </body>
 </html>
+
 
 
 
