@@ -1448,7 +1448,7 @@ function showLoadingAndLoad(email) {
   // compute slide step (card width + gap)
   // use offsetWidth reliably after cards are in DOM
   const step = cards[0].offsetWidth + 12; // 12px gap defined in CSS
-  track.style.transform = translateX(0px);
+  track.style.transform = "translateX(0px)";
 
   // animation: slide one card at a time and update fact
   let factIndexLocal = 0;
@@ -1535,3 +1535,4 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
