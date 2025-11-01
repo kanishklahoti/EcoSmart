@@ -966,33 +966,54 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Send verification code
-  sendCodeBtn.addEventListener('click', () => {
-    const email = emailInput.value.trim();
+sendCodeBtn.addEventListener('click', () => {
+  const email = emailInput.value.trim();
 
-    if (!email) {
-      alert("Please enter your email first.");
-      return;
-    }
+  // Check if email is empty
+  if (!email) {
+    alert("Please enter your email first.");
+    emailInput.focus();
+    return;
+  }
 
-    verificationCode = Math.floor(100000 + Math.random() * 900000);
+  // Optional: simple email format check
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    alert("Please enter a valid email address.");
+    emailInput.focus();
+    return;
+  }
 
-    const params = {
-      to_email: email,
-      verification_code: verificationCode
-    };
+  // Log the email for debugging
+  console.log("Sending verification code to:", email);
 
-    emailjs.send("service_e0pxoa8", "template_blpec5p", params)
-      .then(() => {
-        alert("✅ Verification code sent to your email!");
-        verifyCodeInput.style.display = 'block';
-        sendCodeBtn.style.display = 'none';
-      })
-      .catch((error) => {
-        console.error("EmailJS error:", error);
-        alert("⚠ Could not send verification code. Please check EmailJS setup.");
-      });
-  });
+  // Generate 6-digit verification code
+  verificationCode = Math.floor(100000 + Math.random() * 900000);
 
+  const params = {
+    to_email: email,                 // MUST match your EmailJS template variable
+    verification_code: verificationCode
+  };
+
+  // Disable button to prevent multiple clicks
+  sendCodeBtn.disabled = true;
+  sendCodeBtn.textContent = "Sending...";
+
+  emailjs.send("service_e0pxoa8", "template_blpec5p", params)
+    .then(() => {
+      alert("✅ Verification code sent to your email!");
+      verifyCodeInput.style.display = 'block';
+      sendCodeBtn.style.display = 'none';
+      sendCodeBtn.disabled = false;
+      sendCodeBtn.textContent = "Send Verification Code";
+    })
+    .catch((error) => {
+      console.error("EmailJS error:", error);
+      alert("⚠ Could not send verification code. Please check EmailJS setup and that email is valid.");
+      sendCodeBtn.disabled = false;
+      sendCodeBtn.textContent = "Send Verification Code";
+    });
+});
   // Login or verify code
   loginBtn.addEventListener('click', () => {
     const email = emailInput.value.trim();
@@ -1081,6 +1102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
