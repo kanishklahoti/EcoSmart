@@ -946,12 +946,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const verifyCodeInput = document.getElementById('verifyCodeInput');
   const authTitle = document.getElementById('authTitle');
   const authSubtitle = document.getElementById('authSubtitle');
-  const viewBtn = document.getElementById('viewBtn'); // NEW
+  const viewBtn = document.getElementById('viewBtn');
 
-  // Show popup only if user not logged in
-  if (!localStorage.getItem('ecoUser')) {
-    authPopup.style.display = 'flex';
-  }
+  // Show popup on page load
+  authPopup.style.display = 'flex';
 
   let verificationCode = null;
 
@@ -966,88 +964,87 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Send verification code
-sendCodeBtn.addEventListener('click', () => {
-  const email = emailInput.value.trim();
+  sendCodeBtn.addEventListener('click', () => {
+    let email = emailInput.value.trim().replace(/\s+/g,''); // clean email
 
-  // Check if email is empty
-  if (!email) {
-    alert("Please enter your email first.");
-    emailInput.focus();
-    return;
-  }
+    if (!email) { alert("Please enter your email."); emailInput.focus(); return; }
 
-  // Optional: simple email format check
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailPattern.test(email)) {
-    alert("Please enter a valid email address.");
-    emailInput.focus();
-    return;
-  }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) { alert("Please enter a valid email."); emailInput.focus(); return; }
 
-  // Log the email for debugging
-  console.log("Sending verification code to:", email);
+    console.log("Sending verification code to:", email);
 
-  // Generate 6-digit verification code
-  verificationCode = Math.floor(100000 + Math.random() * 900000);
+    verificationCode = Math.floor(100000 + Math.random() * 900000);
 
-  const params = {
-    to_email: email,                 // MUST match your EmailJS template variable
-    verification_code: verificationCode
-  };
+    const params = { to_email: email, verification_code: verificationCode };
 
-  // Disable button to prevent multiple clicks
-  sendCodeBtn.disabled = true;
-  sendCodeBtn.textContent = "Sending...";
+    sendCodeBtn.disabled = true;
+    sendCodeBtn.textContent = "Sending...";
 
-  emailjs.send("service_e0pxoa8", "template_blpec5p", params)
-    .then(() => {
-      alert("✅ Verification code sent to your email!");
-      verifyCodeInput.style.display = 'block';
-      sendCodeBtn.style.display = 'none';
-      sendCodeBtn.disabled = false;
-      sendCodeBtn.textContent = "Send Verification Code";
-    })
-    .catch((error) => {
-      console.error("EmailJS error:", error);
-      alert("⚠ Could not send verification code. Please check EmailJS setup and that email is valid.");
-      sendCodeBtn.disabled = false;
-      sendCodeBtn.textContent = "Send Verification Code";
-    });
-});
+    emailjs.send("service_e0pxoa8", "template_blpec5p", params)
+      .then(() => {
+        alert("✅ Verification code sent!");
+        verifyCodeInput.style.display = 'block';
+        sendCodeBtn.style.display = 'none';
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.textContent = "Send Verification Code";
+      })
+      .catch((error) => {
+        console.error("EmailJS error:", error);
+        alert("⚠ Could not send verification code. Check email & setup.");
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.textContent = "Send Verification Code";
+      });
+  });
+
   // Login or verify code
   loginBtn.addEventListener('click', () => {
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
 
-    if (!email || !password) {
-      alert("Please fill all fields.");
-      return;
-    }
+    if (!email || !password) { alert("Please fill all fields."); return; }
 
-    // Signup verification flow
+    // Load all users from localStorage
+    let users = JSON.parse(localStorage.getItem('ecoUsers')) || [];
+
+    // Signup flow
     if (verifyCodeInput.style.display === 'block') {
       if (verifyCodeInput.value == verificationCode) {
-        const userData = { email, password };
-        localStorage.setItem('ecoUser', JSON.stringify(userData));
+        // Check if email already exists
+        if (users.some(u => u.email === email)) {
+          alert("This email is already registered. Please log in.");
+          return;
+        }
+
+        users.push({ email, password });
+        localStorage.setItem('ecoUsers', JSON.stringify(users));
+
         alert("🎉 Signup complete! Welcome to EcoSmart 🌱");
         authPopup.style.display = 'none';
+        emailInput.value = '';
+        passwordInput.value = '';
+        verifyCodeInput.value = '';
       } else {
         alert("❌ Incorrect verification code!");
       }
     } 
-    // Normal login
+    // Login flow
     else {
-      const storedUser = JSON.parse(localStorage.getItem('ecoUser'));
-      if (storedUser && storedUser.email === email && storedUser.password === password) {
+      const user = users.find(u => u.email === email && u.password === password);
+      if (user) {
         alert("🌿 Welcome back, " + email + "!");
         authPopup.style.display = 'none';
+        emailInput.value = '';
+        passwordInput.value = '';
+        verifyCodeInput.value = '';
+        // Dashboard is currently home page
       } else {
         alert("User not found or incorrect password. Please sign up first.");
       }
     }
   });
 
-  // View without login button
+  // View without login
   viewBtn.addEventListener('click', () => {
     authPopup.style.display = 'none';
     console.log('User chose to view without login');
@@ -1060,7 +1057,7 @@ sendCodeBtn.addEventListener('click', () => {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.8);
   display: flex; align-items: center; justify-content: center;
-  z-index: 9999; display: none;">
+  z-index: 9999;">
   <div style="background: linear-gradient(135deg,#38ef7d,#11998e);
               padding: 30px; border-radius: 18px; width: 350px;
               box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center;
@@ -1084,7 +1081,6 @@ sendCodeBtn.addEventListener('click', () => {
       border:none;border-radius:8px;background:#FFD166;color:#2B1A55;
       font-weight:bold;cursor:pointer;">Send Verification Code</button>
 
-    <!-- New View without login button -->
     <button id="viewBtn" style="margin-top:10px;padding:10px 20px;border:none;
       border-radius:8px;background:#FFD166;color:#2B1A55;font-weight:bold;cursor:pointer;">
       View without Login
@@ -1099,9 +1095,9 @@ sendCodeBtn.addEventListener('click', () => {
 }
 </style>
 
-
 </body>
 </html>
+
 
 
 
