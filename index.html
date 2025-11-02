@@ -1386,13 +1386,17 @@ guestContinue.addEventListener('click', () => {
 
 /* ------------------------- Loading overlay logic ------------------------- */
 function showLoadingAndLoad(email) {
-  // show logout button
+  // 1) ensure logout visible
   logoutBtn.style.display = 'inline-block';
 
-  // ensure overlay visible and use yellow-ish background
+  // 2) hide the auth popup immediately so it doesn't remain after loading
+  if (authPopup) authPopup.style.display = 'none';
+
+  // 3) prepare overlay look
   loadingOverlay.style.display = 'flex';
-  loadingOverlay.style.background = '#FFD166';
-  // make loading-content text darker for contrast
+  loadingOverlay.style.background = '#FFD166'; // yellow background while loading
+
+  // keep loading-content readable
   const loadingContent = loadingOverlay.querySelector('.loading-content');
   if (loadingContent) loadingContent.style.color = '#2B1A55';
   const title = loadingOverlay.querySelector('.loading-title');
@@ -1402,103 +1406,127 @@ function showLoadingAndLoad(email) {
   if (sub) sub.style.color = '#2B1A55';
   if (factsEl) factsEl.style.color = '#2B1A55';
 
-  // remove any previous carousel (safety)
-  const old = document.getElementById('ecoCarouselWrapper');
-  if (old) old.remove();
+  // 4) Remove any previous single-card container (safety)
+  const oldSingle = document.getElementById('ecoSingleCardWrapper');
+  if (oldSingle) oldSingle.remove();
 
-  // create wrapper + track for carousel (will be inserted above the existing loading-content)
+  // 5) Create single centered card (only one visible at a time)
   const wrapper = document.createElement('div');
-  wrapper.id = 'ecoCarouselWrapper';
+  wrapper.id = 'ecoSingleCardWrapper';
+  wrapper.style.width = '180px';
+  wrapper.style.height = '110px';
+  wrapper.style.margin = '10px auto';
+  wrapper.style.borderRadius = '12px';
+  wrapper.style.overflow = 'hidden';
+  wrapper.style.position = 'relative';
+  wrapper.style.display = 'flex';
+  wrapper.style.alignItems = 'center';
+  wrapper.style.justifyContent = 'center';
+  wrapper.style.boxShadow = '0 6px 18px rgba(0,0,0,0.18)';
+  wrapper.style.background = 'rgba(255,255,255,0.06)';
 
-  const track = document.createElement('div');
-  track.id = 'ecoCarouselTrack';
-  wrapper.appendChild(track);
+  const card = document.createElement('div');
+  card.className = 'carousel-card';
+  card.style.width = '100%';
+  card.style.height = '100%';
+  card.style.borderRadius = '10px';
+  card.style.backgroundSize = 'cover';
+  card.style.backgroundPosition = 'center';
+  card.style.transition = 'opacity 600ms ease, transform 600ms ease';
+  card.style.opacity = '0';
+  card.style.transform = 'scale(0.98)';
 
-  // create cards (one per placeholder image)
-  placeholderImages.forEach((imgUrl) => {
-    const card = document.createElement('div');
-    card.className = 'carousel-card';
-    card.style.backgroundImage = `url('${imgUrl}')`;
-    track.appendChild(card);
-  });
+  wrapper.appendChild(card);
 
-  // insert wrapper into overlay, before loading-content to keep text visible below
+  // insert wrapper before loading content so card sits just above text
   if (loadingContent && loadingContent.parentNode) {
     loadingOverlay.insertBefore(wrapper, loadingContent);
   } else {
     loadingOverlay.appendChild(wrapper);
   }
 
-  // prepare animation state
-  const cards = Array.from(track.querySelectorAll('.carousel-card'));
-  if (cards.length === 0) {
-    // fallback: hide overlay after short pause
-    setTimeout(() => { loadingOverlay.style.display = 'none'; }, 900);
+  // 6) Ensure we have images and facts
+  const imgs = (Array.isArray(placeholderImages) && placeholderImages.length) ? placeholderImages : [];
+  const facts = (Array.isArray(placeholderFacts) && placeholderFacts.length) ? placeholderFacts : ['Loading...'];
+
+  if (imgs.length === 0) {
+    // fallback hide quickly
+    setTimeout(() => {
+      loadingOverlay.style.display = 'none';
+      if (wrapper) wrapper.remove();
+      loadingOverlay.style.background = 'rgba(10,10,10,0.95)';
+    }, 800);
     return;
   }
 
-  // show first card slightly scaled
-  let index = 0;
-  cards.forEach((c, i) => c.classList.remove('active'));
-  cards[index].classList.add('active');
-
-  // ensure initial fact text exists
-  if (loadingFact) loadingFact.textContent = placeholderFacts[0] || '';
-
-  // compute slide step (card width + gap)
-  // use offsetWidth reliably after cards are in DOM
-  const step = cards[0].offsetWidth + 12; // 12px gap defined in CSS
-  track.style.transform = "translateX(0px)";
-
-  // animation: slide one card at a time and update fact
-  let factIndexLocal = 0;
-  const intervalMs = 1100;
-  const totalCycles = 2; // number of full cycles
+  // 7) Show one image at a time by changing card.backgroundImage + opacity fade
+  let idx = 0;
+  let factIdx = 0;
+  const totalCycles = 2; // how many full loops through images
   let cycles = 0;
-  const slideHandle = setInterval(() => {
-    // remove active on prev
-    cards[index].classList.remove('active');
 
-    // advance index
-    index = (index + 1) % cards.length;
-
-    // add active to new
-    cards[index].classList.add('active');
-
-    // translate track so the active card stays centered-ish
-    const translateX = -index * step;
-    track.style.transform = 'translateX(${translateX}px)';
-
-    // update facts
-    factIndexLocal = (factIndexLocal + 1) % placeholderFacts.length;
-    if (loadingFact) {
-      loadingFact.style.opacity = '0';
+  // helper to set image with fade-in
+  function showImageAt(i) {
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.985)';
+    // short delay to allow fade-out
+    setTimeout(() => {
+      card.style.backgroundImage = `url('${imgs[i]}')`;
+      // update fact text (fade)
+      if (loadingFact) {
+        loadingFact.style.opacity = '0';
+        setTimeout(() => {
+          loadingFact.textContent = facts[factIdx];
+          loadingFact.style.opacity = '1';
+        }, 200);
+      }
+      // fade-in
       setTimeout(() => {
-        loadingFact.textContent = placeholderFacts[factIndexLocal];
-        loadingFact.style.opacity = '1';
-      }, 220);
-    }
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1.02)';
+      }, 60);
+    }, 200);
+  }
 
-    // count cycles: increment when index wraps to 0
-    if (index === cards.length - 1) cycles++;
+  // initial show
+  factIdx = 0;
+  showImageAt(idx);
+
+  // schedule transitions: show next image every intervalMs
+  const intervalMs = 1100;
+  const handle = setInterval(() => {
+    // advance indexes
+    idx = (idx + 1) % imgs.length;
+    factIdx = (factIdx + 1) % facts.length;
+
+    showImageAt(idx);
+
+    // when we complete a full loop (returned to 0), increment cycles
+    if (idx === imgs.length - 1) cycles++;
+    // stop after required cycles
     if (cycles >= totalCycles) {
-      clearInterval(slideHandle);
-      // small pause then hide overlay and reset to original dark style
+      clearInterval(handle);
+      // small pause then hide overlay and clean up
       setTimeout(() => {
+        // hide overlay
         loadingOverlay.style.display = 'none';
-        // restore original overlay background color
+        // restore background to original dark
         loadingOverlay.style.background = 'rgba(10,10,10,0.95)';
-        if (loadingContent) loadingContent.style.color = ''; // revert
+        // reset colors back to defaults (so next open is normal)
+        if (loadingContent) loadingContent.style.color = '';
         if (title) title.style.color = '';
         if (sub) sub.style.color = '';
         if (factsEl) factsEl.style.color = '';
-        // remove carousel wrapper to keep DOM clean
-        const rem = document.getElementById('ecoCarouselWrapper');
+        // remove the single card wrapper to keep DOM clean
+        const rem = document.getElementById('ecoSingleCardWrapper');
         if (rem) rem.remove();
-      }, 700);
+        // After loading completes, the user is logged in (authPopup already hidden)
+        // If you want to initialize dashboard content here, do it.
+      }, 650);
     }
   }, intervalMs);
 }
+
 
 /* ------------------------- Logout ------------------------- */
 logoutBtn.addEventListener('click', () => {
@@ -1535,6 +1563,7 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
 
 
 
