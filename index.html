@@ -1198,7 +1198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // hide popup, show logout button and load dashboard
     authPopup.style.display = 'none';
     logoutBtn.style.display = 'inline-block';
-    showLoadingAndLoad(current);
+    showLoadingOnce(current);
   } else {
     // show popup for manual login/signup
     authPopup.style.display = 'flex';
@@ -1322,7 +1322,7 @@ loginBtn.addEventListener('click', async () => {
       alert("🎉 Signup complete! Logging you in...");
       setCurrentUser(email);
       ensureUserData(email);
-      showLoadingAndLoad(email);
+      showLoadingOnce(email);
       // reset UI state
       signupMode = false;
       verifyCodeInput.style.display = 'none';
@@ -1342,7 +1342,7 @@ loginBtn.addEventListener('click', async () => {
       alert("🌿 Welcome back, " + email + "!" + " Loading your Dashboard...");
       setCurrentUser(email);
       ensureUserData(email);
-      showLoadingAndLoad(email);
+      showLoadingOnce(email);
       return;
     } else {
       alert("User not found or incorrect password. Please sign up first.");
@@ -1577,6 +1577,7 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
 
 
 
