@@ -1,11 +1,11 @@
 const CACHE_NAME = "ecosmart-v1";
 const urlsToCache = [
-  "index.html",
-  "about.html",
-  "products.html",
+  "https://kanishklahoti.github.io/EcoSmart/index.html",
+  "https://kanishklahoti.github.io/EcoSmart/Aboutus.html",
+  "https://kanishklahoti.github.io/EcoSmart/all-products.html",
   "styles.css",
   "script.js",
-  "ecosmart.jpg"
+  "https://kanishklahoti.github.io/EcoSmart/ecosmart.jpg"
 ];
 
 // Install Service Worker
@@ -24,4 +24,5 @@ self.addEventListener("fetch", (event) => {
       return response || fetch(event.request);
     })
   );
+
 });
