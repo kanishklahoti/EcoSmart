@@ -3,8 +3,6 @@ const urlsToCache = [
   "https://kanishklahoti.github.io/EcoSmart/index.html",
   "https://kanishklahoti.github.io/EcoSmart/Aboutus.html",
   "https://kanishklahoti.github.io/EcoSmart/all-products.html",
-  "styles.css",
-  "script.js",
   "https://kanishklahoti.github.io/EcoSmart/ecosmart.jpg"
 ];
 
@@ -26,3 +24,4 @@ self.addEventListener("fetch", (event) => {
   );
 
 });
+
