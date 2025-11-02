@@ -1108,19 +1108,6 @@ emailjs.init("gIO73_6-evFQpi5nl"); // your EmailJS public key
 const EMAIL_SERVICE = "service_e0pxoa8";
 const EMAIL_TEMPLATE = "template_blpec5p";
 
-
-  /* ------------------------- Loading overlay: only once per session ------------------------- */
-function showLoadingOnce(email) {
-  if (!sessionStorage.getItem('overlayShown')) {
-    showLoadingOnce(email);        // call your existing overlay function
-    sessionStorage.setItem('overlayShown', 'true');
-  } else {
-    // skip overlay, just show logout/auth cleared etc.
-    logoutBtn.style.display = 'inline-block';
-    if (authPopup) authPopup.style.display = 'none';
-  }
-}
-
 /* ------------------------- Elements ------------------------- */
 const authPopup = document.getElementById('authPopup');
 const authBox = document.getElementById('authBox');
@@ -1198,7 +1185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // hide popup, show logout button and load dashboard
     authPopup.style.display = 'none';
     logoutBtn.style.display = 'inline-block';
-    showLoadingOnce(current);
+    showLoadingAndLoad(current); // this function now guards with sessionStorage per-user
   } else {
     // show popup for manual login/signup
     authPopup.style.display = 'flex';
@@ -1298,7 +1285,7 @@ loginBtn.addEventListener('click', async () => {
       // login the user
       setCurrentUser(email);
       ensureUserData(email);
-      showLoadingOnce(email);
+      showLoadingAndLoad(email);
       resetMode = false;
       verifyCodeInput.style.display = 'none';
       passwordInput.placeholder = "Password";
@@ -1322,7 +1309,7 @@ loginBtn.addEventListener('click', async () => {
       alert("🎉 Signup complete! Logging you in...");
       setCurrentUser(email);
       ensureUserData(email);
-      showLoadingOnce(email);
+      showLoadingAndLoad(email);
       // reset UI state
       signupMode = false;
       verifyCodeInput.style.display = 'none';
@@ -1339,10 +1326,10 @@ loginBtn.addEventListener('click', async () => {
   if (!resetMode && !signupMode) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
-      alert("🌿 Welcome back, " + email + "!" + " Loading your Dashboard...");
+      alert("🌿 Welcome back, " + email + "!" + "Loading your Dahboard");
       setCurrentUser(email);
       ensureUserData(email);
-      showLoadingOnce(email);
+      showLoadingAndLoad(email);
       return;
     } else {
       alert("User not found or incorrect password. Please sign up first.");
@@ -1398,8 +1385,19 @@ guestContinue.addEventListener('click', () => {
   // show logout hidden? no, guest isn't logged in so no logout button
 });
 
-/* ------------------------- Loading overlay logic ------------------------- */
-function showLoadingOnce(email) {
+/* ------------------------- Loading overlay logic with session guard ------------------------- */
+function showLoadingAndLoad(email) {
+  // --- SESSION GUARD: if overlay already shown this session for this user, skip it ---
+  const overlayKey = `ecoOverlayShown_${email}`;
+  if (sessionStorage.getItem(overlayKey)) {
+    // Already shown this session -> ensure UI state and skip overlay
+    logoutBtn.style.display = 'inline-block';
+    if (authPopup) authPopup.style.display = 'none';
+    return;
+  }
+  // mark it shown for this session
+  sessionStorage.setItem(overlayKey, 'true');
+
   // 1) ensure logout visible
   logoutBtn.style.display = 'inline-block';
 
@@ -1545,6 +1543,11 @@ function showLoadingOnce(email) {
 /* ------------------------- Logout ------------------------- */
 logoutBtn.addEventListener('click', () => {
   if (!confirm("Logout and return to the login screen?")) return;
+  // remove session overlay flag for current user so overlay will show next login
+  const current = getCurrentUser();
+  if (current) {
+    sessionStorage.removeItem(`ecoOverlayShown_${current}`);
+  }
   clearCurrentUser();
   logoutBtn.style.display = 'none';
   // reset popup UI states
@@ -1575,8 +1578,10 @@ function ensureUserData(email) {
 
 /* ------------------------- End of script ------------------------- */
 </script>
+
 </body>
 </html>
+
 
 
 
