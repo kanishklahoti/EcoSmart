@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1106,27 +1107,6 @@ window.addEventListener('load', () => {
 emailjs.init("gIO73_6-evFQpi5nl"); // your EmailJS public key
 const EMAIL_SERVICE = "service_e0pxoa8";
 const EMAIL_TEMPLATE = "template_blpec5p";
-  /* ------------------------- Safe storage wrapper (ADD THIS) ------------------------- */
-function safeStorage() {
-  try {
-    // quick test to ensure localStorage works in this browser/context
-    localStorage.setItem('__eco_test__', '1');
-    localStorage.removeItem('__eco_test__');
-    console.info("✅ localStorage available — using it for persistence.");
-    return localStorage; // use native localStorage
-  } catch (e) {
-    // some mobile in-app/embedded browsers block localStorage — fallback to in-memory store
-    console.warn("⚠ localStorage unavailable — using in-memory fallback for this session.", e);
-    const memoryStore = {};
-    return {
-      setItem: (k, v) => { memoryStore[k] = String(v); },
-      getItem: (k) => memoryStore.hasOwnProperty(k) ? memoryStore[k] : null,
-      removeItem: (k) => { delete memoryStore[k]; }
-    };
-  }
-}
-const storage = safeStorage();
-
 
 /* ------------------------- Elements ------------------------- */
 const authPopup = document.getElementById('authPopup');
@@ -1172,41 +1152,30 @@ const placeholderFacts = [
 ];
 
 /* ------------------------- Utility Helpers ------------------------- */
-const STORAGE_API = "https://script.google.com/macros/s/AKfycbx-lk6z7mqmb1kRJJPEHTFWMsvldrObVXd1kKliYsa1kelaEUqoZMHlS9qIsPMPfd_8/exec";
-
-async function getUsers() {
-  try {
-    const res = await fetch(STORAGE_API);
-    return await res.json();
-  } catch(e) {
-    console.error("Error fetching users:", e);
-    return [];
-  }
+function saveUsers(users) {
+  localStorage.setItem('ecoUsers', JSON.stringify(users));
 }
-
-async function saveUser(user) {
-  try {
-    await fetch(STORAGE_API, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(user)
-    });
-  } catch(e) {
-    console.error("Error saving user:", e);
-  }
+function getUsers() {
+  return JSON.parse(localStorage.getItem('ecoUsers')) || [];
 }
-
-async function setCurrentUser(email) {
-  localStorage.setItem('ecoCurrentUser', email); // still client-side session
+function setCurrentUser(email) {
+  localStorage.setItem('ecoCurrentUser', email);
 }
-
 function getCurrentUser() {
   return localStorage.getItem('ecoCurrentUser');
 }
-
 function clearCurrentUser() {
   localStorage.removeItem('ecoCurrentUser');
 }
+function ensureUserData(email) {
+  // ecoUserData stored as object keyed by email
+  let data = JSON.parse(localStorage.getItem('ecoUserData') || "{}");
+  if (!data[email]) {
+    data[email] = { preferences: {}, createdAt: Date.now() };
+    localStorage.setItem('ecoUserData', JSON.stringify(data));
+  }
+}
+function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
 
 /* ------------------------- Page init: session-based login ------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1281,9 +1250,7 @@ function strongPassword(password) {
 loginBtn.addEventListener('click', async () => {
   const email = (emailInput.value || "").trim();
   const password = (passwordInput.value || "").trim();
-  await saveUser({ email, password, preferences: { theme:'light' } });
-setCurrentUser(email);
-
+  let users = getUsers();
 
   // basic presence checks; for resetMode we allow empty password until verification step
   if (!email || (!password && !resetMode)) {
@@ -1597,8 +1564,6 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
-
-
 
 
 
