@@ -1092,7 +1092,7 @@ window.addEventListener('load', () => {
 
     <div style="margin-top:6px;">
       <button id="sendCodeBtn" class="auth-btn" style="display:none;">Send Verification Code</button>
-      <button id="viewBtn" class="auth-btn" style="background:transparent;border:2px solid #FFD166;color:#FFD166;">View without Login</button>
+      <button id="viewBtn" class="auth-btn">View without Login</button>
     </div>
 
     <p style="margin-top:10px;"><a id="forgotPasswordLink" class="small-link">Forgot Password?</a></p>
@@ -1326,7 +1326,7 @@ loginBtn.addEventListener('click', async () => {
   if (!resetMode && !signupMode) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
-      alert("🌿 Welcome back, " + email + "!");
+      alert("🌿 Welcome back, " + email + "!" + "Loading your Dahboard");
       setCurrentUser(email);
       ensureUserData(email);
       showLoadingAndLoad(email);
@@ -1564,6 +1564,7 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
 
 
 
