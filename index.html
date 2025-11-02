@@ -1326,7 +1326,7 @@ loginBtn.addEventListener('click', async () => {
   if (!resetMode && !signupMode) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
-      alert("🌿 Welcome back, " + email + "!" + "Loading your Dahboard");
+      alert("🌿 Welcome back, " + email + "!" + " Loading your Dashboard...");
       setCurrentUser(email);
       ensureUserData(email);
       showLoadingAndLoad(email);
@@ -1564,6 +1564,7 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
 
 
 
