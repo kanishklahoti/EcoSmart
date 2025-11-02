@@ -1108,6 +1108,19 @@ emailjs.init("gIO73_6-evFQpi5nl"); // your EmailJS public key
 const EMAIL_SERVICE = "service_e0pxoa8";
 const EMAIL_TEMPLATE = "template_blpec5p";
 
+
+  /* ------------------------- Loading overlay: only once per session ------------------------- */
+function showLoadingOnce(email) {
+  if (!sessionStorage.getItem('overlayShown')) {
+    showLoadingOnce(email);        // call your existing overlay function
+    sessionStorage.setItem('overlayShown', 'true');
+  } else {
+    // skip overlay, just show logout/auth cleared etc.
+    logoutBtn.style.display = 'inline-block';
+    if (authPopup) authPopup.style.display = 'none';
+  }
+}
+
 /* ------------------------- Elements ------------------------- */
 const authPopup = document.getElementById('authPopup');
 const authBox = document.getElementById('authBox');
@@ -1285,7 +1298,7 @@ loginBtn.addEventListener('click', async () => {
       // login the user
       setCurrentUser(email);
       ensureUserData(email);
-      showLoadingAndLoad(email);
+      showLoadingOnce(email);
       resetMode = false;
       verifyCodeInput.style.display = 'none';
       passwordInput.placeholder = "Password";
@@ -1386,7 +1399,7 @@ guestContinue.addEventListener('click', () => {
 });
 
 /* ------------------------- Loading overlay logic ------------------------- */
-function showLoadingAndLoad(email) {
+function showLoadingOnce(email) {
   // 1) ensure logout visible
   logoutBtn.style.display = 'inline-block';
 
@@ -1564,6 +1577,7 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
 
 
 
