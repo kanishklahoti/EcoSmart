@@ -1172,27 +1172,41 @@ const placeholderFacts = [
 ];
 
 /* ------------------------- Utility Helpers ------------------------- */
-/* ------------------------- Storage-backed helper functions (REPLACE THESE) ------------------------- */
-function saveUsers(users) { storage.setItem('ecoUsers', JSON.stringify(users)); }
-function getUsers() {
-  try { return JSON.parse(storage.getItem('ecoUsers') || '[]'); }
-  catch (e) { console.error("Error parsing ecoUsers from storage:", e); return []; }
-}
-function setCurrentUser(email) { storage.setItem('ecoCurrentUser', email); }
-function getCurrentUser() { return storage.getItem('ecoCurrentUser'); }
-function clearCurrentUser() { storage.removeItem('ecoCurrentUser'); }
+const STORAGE_API = "https://script.google.com/macros/s/AKfycbx-lk6z7mqmb1kRJJPEHTFWMsvldrObVXd1kKliYsa1kelaEUqoZMHlS9qIsPMPfd_8/exec";
 
-function ensureUserData(email) {
-  const key = 'ecoUserData';
-  let all = {};
-  try { all = JSON.parse(storage.getItem(key) || "{}"); } 
-  catch (e) { all = {}; }
-  if (!all[email]) {
-    all[email] = { preferences: {}, createdAt: Date.now() };
-    storage.setItem(key, JSON.stringify(all));
+async function getUsers() {
+  try {
+    const res = await fetch(STORAGE_API);
+    return await res.json();
+  } catch(e) {
+    console.error("Error fetching users:", e);
+    return [];
   }
 }
-function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
+
+async function saveUser(user) {
+  try {
+    await fetch(STORAGE_API, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(user)
+    });
+  } catch(e) {
+    console.error("Error saving user:", e);
+  }
+}
+
+async function setCurrentUser(email) {
+  localStorage.setItem('ecoCurrentUser', email); // still client-side session
+}
+
+function getCurrentUser() {
+  return localStorage.getItem('ecoCurrentUser');
+}
+
+function clearCurrentUser() {
+  localStorage.removeItem('ecoCurrentUser');
+}
 
 /* ------------------------- Page init: session-based login ------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1267,7 +1281,9 @@ function strongPassword(password) {
 loginBtn.addEventListener('click', async () => {
   const email = (emailInput.value || "").trim();
   const password = (passwordInput.value || "").trim();
-  let users = getUsers();
+  await saveUser({ email, password, preferences: { theme:'light' } });
+setCurrentUser(email);
+
 
   // basic presence checks; for resetMode we allow empty password until verification step
   if (!email || (!password && !resetMode)) {
@@ -1581,6 +1597,7 @@ function ensureUserData(email) {
 </script>
 </body>
 </html>
+
 
 
 
