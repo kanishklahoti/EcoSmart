@@ -420,10 +420,26 @@ Gift Wrap Available by paying ₹100 on delivery
 </form>
 </section>
       
-<!-- SMART THERMOSTAT PRODUCT WITH AR BUTTON -->
+<!-- Include model-viewer script -->
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<!-- SMART THERMOSTAT PRODUCT WITH AR + 3D VIEWER -->
 <div class="product-card" style="text-align:center;margin-top:30px;">
 
+  <!-- 3D Model Preview (visible on desktop) -->
+  <model-viewer
+    id="thermostatViewer"
+    src="assets/models/Smartthermostat3.glb"
+    alt="Smart Thermostat 3D Model"
+    auto-rotate
+    camera-controls
+    disable-zoom="false"
+    style="width: 100%; max-width: 400px; height: 400px; margin: auto; border-radius: 10px; background: #f8f8f8;">
+  </model-viewer>
+
+  <!-- AR Button (only visible on mobile) -->
   <button 
+    id="arButton"
     onclick="viewInAR('assets/models/Smartthermostat3.glb', 'assets/models/Smartthermostat3.usdz')" 
     style="padding:10px 18px;margin-top:10px;border:none;border-radius:10px;background:#FFD166;color:#2B1A55;font-weight:bold;cursor:pointer;">
     👀 View in your room
@@ -440,7 +456,7 @@ function viewInAR(glbPath, usdzPath) {
     // iOS Quick Look (USDZ)
     const a = document.createElement('a');
     a.rel = 'ar';
-    a.href = usdzPath;  // USDZ file for iOS
+    a.href = usdzPath;
     a.click();
     return;
   }
@@ -448,15 +464,23 @@ function viewInAR(glbPath, usdzPath) {
   if (isAndroid) {
     // Android Scene Viewer (GLB)
     const absolute = (new URL(glbPath, window.location.href)).href;
-    const intentUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(absolute)}#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;end;`;
+    const intentUrl = intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(absolute)}#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;end;;
     window.location.href = intentUrl;
     return;
   }
 
   alert("AR preview works best on mobile devices (iPhone or Android with AR support).");
 }
-</script>
 
+// Hide AR button on desktop for cleaner design
+document.addEventListener('DOMContentLoaded', () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isMobile = /android/i.test(ua) || /iPad|iPhone|iPod/.test(ua);
+  if (!isMobile) {
+    document.getElementById('arButton').style.display = 'none';
+  }
+});
+</script>
 
       <div class="reviews-row">
         <div class="stars" id="avgStars">★★★★☆</div>
@@ -928,6 +952,7 @@ function toggleMenu() {
 </script>
 </body>
 </html>
+
 
 
 
