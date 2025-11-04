@@ -22,6 +22,37 @@ self.addEventListener("fetch", (event) => {
       return response || fetch(event.request);
     })
   );
-
 });
 
+// ===== Add Push Notification Support =====
+self.addEventListener('push', function(event) {
+  // event.data.json() contains the payload sent from server
+  const data = event.data ? event.data.json() : {};
+  const title = data.title || "EcoSmart Notification";
+  const options = {
+    body: data.body || "You have a new update!",
+    icon: "https://kanishklahoti.github.io/EcoSmart/ecosmart.jpg",
+    badge: "https://kanishklahoti.github.io/EcoSmart/ecosmart.jpg",
+    data: data.url || "/" // optional: click action URL
+  };
+  
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Optional: handle notification click
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  const urlToOpen = event.notification.data || "/";
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then(windowClients => {
+      for (let client of windowClients) {
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
