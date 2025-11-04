@@ -420,67 +420,40 @@ Gift Wrap Available by paying ₹100 on delivery
 </form>
 </section>
       
-<!-- Include model-viewer library -->
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
-<!-- SMART THERMOSTAT PRODUCT WITH AR + DESKTOP MODEL POPUP -->
+<!-- SMART THERMOSTAT PRODUCT WITH AR BUTTON -->
 <div class="product-card" style="text-align:center;margin-top:30px;">
+
   <button 
-    onclick="viewInARor3D('assets/models/Smartthermostat3.glb', 'assets/models/Smartthermostat3.usdz')" 
+    onclick="viewInAR('assets/models/Smartthermostat3.glb', 'assets/models/Smartthermostat3.usdz')" 
     style="padding:10px 18px;margin-top:10px;border:none;border-radius:10px;background:#FFD166;color:#2B1A55;font-weight:bold;cursor:pointer;">
     👀 View in your room
   </button>
 </div>
 
-<!-- Popup Overlay for Desktop 3D Viewer -->
-<div id="modelPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center;">
-  <div style="position:relative; width:90%; max-width:600px; background:#fff; border-radius:10px; overflow:hidden; padding:10px;">
-    <button onclick="closeModelPopup()" style="position:absolute; top:10px; right:10px; background:#FFD166; color:#2B1A55; border:none; border-radius:5px; padding:5px 10px; cursor:pointer; font-weight:bold;">✖</button>
-    <model-viewer id="desktopViewer"
-      src=""
-      alt="Smart Thermostat 3D Model"
-      auto-rotate
-      camera-controls
-      disable-zoom="false"
-      style="width:100%; height:500px; background:#f8f8f8;">
-    </model-viewer>
-  </div>
-</div>
-
 <script>
-function viewInARor3D(glbPath, usdzPath) {
+function viewInAR(glbPath, usdzPath) {
   const ua = navigator.userAgent || navigator.vendor || window.opera;
   const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const isAndroid = /android/i.test(ua);
-  const isMobile = isIOS || isAndroid;
 
-  if (isMobile) {
-    // Mobile → launch AR as before
-    if (isIOS) {
-      const a = document.createElement('a');
-      a.rel = 'ar';
-      a.href = usdzPath;
-      a.click();
-      return;
-    }
-    if (isAndroid) {
-      const absolute = (new URL(glbPath, window.location.href)).href;
-      const intentUrl = intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(absolute)}#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;end;;
-      window.location.href = intentUrl;
-      return;
-    }
-  } else {
-    // Desktop → open popup with 3D model
-    const popup = document.getElementById('modelPopup');
-    const viewer = document.getElementById('desktopViewer');
-    viewer.src = glbPath;
-    popup.style.display = 'flex';
+  if (isIOS) {
+    // iOS Quick Look (USDZ)
+    const a = document.createElement('a');
+    a.rel = 'ar';
+    a.href = usdzPath;  // USDZ file for iOS
+    a.click();
+    return;
   }
-}
 
-function closeModelPopup() {
-  document.getElementById('modelPopup').style.display = 'none';
-  document.getElementById('desktopViewer').src = '';
+  if (isAndroid) {
+    // Android Scene Viewer (GLB)
+    const absolute = (new URL(glbPath, window.location.href)).href;
+    const intentUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(absolute)}#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;end;`;
+    window.location.href = intentUrl;
+    return;
+  }
+
+  alert("AR preview works best on mobile devices (iPhone or Android with AR support).");
 }
 </script>
 
@@ -954,6 +927,7 @@ function toggleMenu() {
 </script>
 </body>
 </html>
+
 
 
 
