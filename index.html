@@ -1594,9 +1594,30 @@ function ensureUserData(email) {
 
 /* ------------------------- End of script ------------------------- */
 </script>
+  <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdCxvQw_oIgf-Jfmrw3oLhx236Ydaxs6w",
+    authDomain: "ecosmart-b4613.firebaseapp.com",
+    projectId: "ecosmart-b4613",
+    storageBucket: "ecosmart-b4613.firebasestorage.app",
+    messagingSenderId: "1032334615608",
+    appId: "1:1032334615608:web:25ad6d59ca342ad637b2cd",
+    measurementId: "G-YL1QP7C4G5"
+  };
+
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+</script>
+
 
 </body>
 </html>
+
 
 
 
