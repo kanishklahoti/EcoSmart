@@ -1662,7 +1662,7 @@ onMessage(messaging, (payload) => {
 
   console.log("Firebase initialized, Messaging ready");
     if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+  navigator.serviceWorker.register('https://kanishklahoti.github.io/EcoSmart/firebase-messaging-sw.js')
     .then((registration) => {
       console.log("Service Worker 2 registered:", registration);
     })
@@ -1676,6 +1676,7 @@ onMessage(messaging, (payload) => {
 
 </body>
 </html>
+
 
 
 
