@@ -1325,6 +1325,7 @@ loginBtn.addEventListener('click', async () => {
       alert("🎉 Signup complete! Logging you in...");
       setCurrentUser(email);
       ensureUserData(email);
+      requestNotificationPermission();
       showLoadingAndLoad(email);
       // reset UI state
       signupMode = false;
@@ -1338,20 +1339,27 @@ loginBtn.addEventListener('click', async () => {
     }
   }
 
-  // Normal login flow (no visible verify input)
-  if (!resetMode && !signupMode) {
-    const user = users.find(u => u.email === email && u.password === password);
-    if (user) {
-      alert("🌿 Welcome back, " + email + "!" + "Loading your Dahboard");
-      setCurrentUser(email);
-      ensureUserData(email);
-      showLoadingAndLoad(email);
-      return;
-    } else {
-      alert("User not found or incorrect password. Please sign up first.");
-    }
+ // Normal login flow (no visible verify input)
+if (!resetMode && !signupMode) {
+  const user = users.find(u => u.email === email && u.password === password);
+  if (user) {
+    alert("🌿 Welcome back, " + email + "!" + "Loading your Dashboard");
+
+    setCurrentUser(email);
+    ensureUserData(email);
+    
+    // 🔔 Request push notification permission here
+    requestNotificationPermission();
+
+    showLoadingAndLoad(email);
+    return;
+  } else {
+    alert("User not found or incorrect password. Please sign up first.");
   }
+}
 });
+
+  
 
 /* ------------------------- Forgot password (login view only) ------------------------- */
 forgotLink.addEventListener('click', () => {
@@ -1593,12 +1601,12 @@ function ensureUserData(email) {
 }
 
 /* ------------------------- End of script ------------------------- */
-</script>
-  <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js"></script>
 
 <script>
+  // Your Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyDdCxvQw_oIgf-Jfmrw3oLhx236Ydaxs6w",
     authDomain: "ecosmart-b4613.firebaseapp.com",
@@ -1610,13 +1618,36 @@ function ensureUserData(email) {
   };
 
   // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
+
+  // Init Messaging
   const messaging = firebase.messaging();
 </script>
+// Ask Notification Permission + Get Token
+async function requestNotificationPermission() {
+  console.log("Requesting notification permission...");
+  const permission = await Notification.requestPermission();
 
+  if (permission === "granted") {
+    console.log("Notification permission granted.");
+
+    const token = await messaging.getToken({
+      vapidKey: "BEbSaD5dNNAq_xSQUGXWfsNsovMlT4QGGCKyT25Uc-fX7LjXFPv_FW_kjSGmhQFpy-tj1hJB2XYKGf0Hx-sfeUE"
+    });
+
+    console.log("User FCM Token: ", token);
+
+    // Save token to localStorage
+    localStorage.setItem("ecosmart_push_token", token);
+
+  } else {
+    console.log("Notification permission denied.");
+  }
+}
 
 </body>
 </html>
+
 
 
 
