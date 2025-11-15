@@ -1,6 +1,6 @@
-// Import Firebase libraries
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getMessaging, onBackgroundMessage } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging-sw.js";
+// Use importScripts for SW
+importScripts('https://www.gstatic.com/firebasejs/12.6.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging-compat.js');
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -12,17 +12,17 @@ const firebaseConfig = {
   appId: "1:79350875818:web:6b31281560b9b7ddb5b2d3",
   measurementId: "G-D374S054J8"
 };
+firebase.initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+// Retrieve Firebase Messaging object
+const messaging = firebase.messaging();
 
-// Listen for background messages
-onBackgroundMessage(messaging, (payload) => {
+// Handle background messages
+messaging.onBackgroundMessage(function(payload) {
   console.log('[firebase-messaging-sw.js] Background message received:', payload);
 
-  // Show notification
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
-    icon: '/icon.png' // optional: your logo
+    icon: '/icon.png'
   });
 });
