@@ -1,21 +1,28 @@
-importScripts("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js");
+// Import Firebase libraries
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getMessaging, onBackgroundMessage } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging-sw.js";
 
-firebase.initializeApp({
-  apiKey: "AIzaSyDdCxvQw_oIgf-Jfmrw3oLhx236Ydaxs6w",
-  authDomain: "ecosmart-b4613.firebaseapp.com",
-  projectId: "ecosmart-b4613",
-  storageBucket: "ecosmart-b4613.firebasestorage.app",
-  messagingSenderId: "1032334615608",
-  appId: "1:1032334615608:web:25ad6d59ca342ad637b2cd"
-});
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCd0TFYRUhffPg2Tn65JJBUxXFb8pk_a_M",
+  authDomain: "ecosmart-a378d.firebaseapp.com",
+  projectId: "ecosmart-a378d",
+  storageBucket: "ecosmart-a378d.firebasestorage.app",
+  messagingSenderId: "79350875818",
+  appId: "1:79350875818:web:6b31281560b9b7ddb5b2d3",
+  measurementId: "G-D374S054J8"
+};
 
-const messaging = firebase.messaging();
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
-// Background Push Handler
-messaging.onBackgroundMessage((payload) => {
+// Listen for background messages
+onBackgroundMessage(messaging, (payload) => {
+  console.log('[firebase-messaging-sw.js] Background message received:', payload);
+
+  // Show notification
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
-    icon: "/ecosmart.jpg"
+    icon: '/icon.png' // optional: your logo
   });
 });
