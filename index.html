@@ -1661,21 +1661,25 @@ onMessage(messaging, (payload) => {
 
 
   console.log("Firebase initialized, Messaging ready");
-    if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('https://kanishklahoti.github.io/EcoSmart/firebase-messaging-sw.js')
-    .then((registration) => {
-      console.log("Service Worker 2 registered:", registration);
-    })
-    .catch((err) => {
-      console.error("Service Worker 2 registration failed:", err);
-    });
+  if ('serviceWorker' in navigator) {
+  // Manually register SW at correct path
+  const registration = await navigator.serviceWorker.register('/EcoSmart/firebase-messaging-sw.js');
+
+  const token = await getToken(messaging, { 
+    vapidKey: "BPlRr_ySBCWgZr0nqrlJHnDoln4vpDE0WkoAbLDPDJUErPFEBlGSUfPAL_LNtkbslWe2MFYUNGflK42NfK89wsw",
+    serviceWorkerRegistration: registration
+  });
+
+  console.log("User push token:", token);
 }
+
 
 </script>
 
 
 </body>
 </html>
+
 
 
 
