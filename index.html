@@ -1595,9 +1595,88 @@ function ensureUserData(email) {
 
 /* ------------------------- End of script ------------------------- */
 </script>
+  <script type="module">
+  // 1️⃣ Import Firebase core and analytics
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+
+  // 2️⃣ Firebase config from your project
+  const firebaseConfig = {
+    apiKey: "AIzaSyCd0TFYRUhffPg2Tn65JJBUxXFb8pk_a_M",
+    authDomain: "ecosmart-a378d.firebaseapp.com",
+    projectId: "ecosmart-a378d",
+    storageBucket: "ecosmart-a378d.firebasestorage.app",
+    messagingSenderId: "79350875818",
+    appId: "1:79350875818:web:6b31281560b9b7ddb5b2d3",
+    measurementId: "G-D374S054J8"
+  };
+
+  // 3️⃣ Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // 4️⃣ Import Firebase Messaging (for push notifications)
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging.js";
+
+  // 5️⃣ Initialize Messaging
+  const messaging = getMessaging(app);
+    // Function to request notification permission and get FCM token
+async function initPushNotifications() {
+  try {
+    // Ask user permission
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      console.log("Notification permission denied");
+      return;
+    }
+
+    // Get FCM token
+    const token = await getToken(messaging, { 
+      vapidKey: "BPlRr_ySBCWgZr0nqrlJHnDoln4vpDE0WkoAbLDPDJUErPFEBlGSUfPAL_LNtkbslWe2MFYUNGflK42NfK89wsw" 
+    });
+
+    console.log("User push token:", token);
+
+    // Optional: send token to your server or Firebase Firestore
+    // fetch('/save-token', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) });
+
+  } catch (err) {
+    console.error("Push notification error:", err);
+  }
+}
+
+// Call this after user visits your site or logs in
+initPushNotifications();
+    // Handle messages while the user is on the website (foreground)
+onMessage(messaging, (payload) => {
+  console.log('Foreground message received:', payload);
+
+  // Show a notification in the browser
+  new Notification(payload.notification.title, {
+    body: payload.notification.body,
+    icon: '/ecosmart.jpg' // replace with your logo or product icon
+  });
+});
+
+
+
+  console.log("Firebase initialized, Messaging ready");
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log("Service Worker registered:", registration);
+    })
+    .catch((err) => {
+      console.error("Service Worker registration failed:", err);
+    });
+}
+
+</script>
+
 
 </body>
 </html>
+
 
 
 
