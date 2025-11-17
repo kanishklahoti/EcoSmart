@@ -1628,7 +1628,7 @@ async function initPushNotifications() {
     }
 
     // ✅ Register the corrected service worker at root
-    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    const registration = await navigator.serviceWorker.register('/EcoSmart/firebase-messaging-sw.js');
 
     // ✅ Get FCM token using the SW
     const token = await getToken(messaging, {
@@ -1665,6 +1665,7 @@ initPushNotifications();
 
 </body>
 </html>
+
 
 
 
