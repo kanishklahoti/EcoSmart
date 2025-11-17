@@ -1657,6 +1657,23 @@ onMessage(messaging, (payload) => {
 
 // 5️⃣ Initialize notifications on page load
 initPushNotifications();
+  import { subscribeToTopic } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging.js";
+
+// Subscribe user to topic "EcoSmart"
+async function subscribeUserToTopic(token) {
+  try {
+    await fetch(`https://iid.googleapis.com/iid/v1/${token}/rel/topics/daily_tips`, {
+      method: "POST",
+      headers: {
+        "Authorization": "key=BPlRr_ySBCWgZr0nqrlJHnDoln4vpDE0WkoAbLDPDJUErPFEBlGSUfPAL_LNtkbslWe2MFYUNGflK42NfK89wsw", // from Firebase Project Settings → Cloud Messaging
+      }
+    });
+    console.log("Subscribed to topic: daily_tips");
+  } catch (err) {
+    console.error("Error subscribing to topic:", err);
+  }
+}
+
 </script>
 
 
@@ -1665,6 +1682,7 @@ initPushNotifications();
 
 </body>
 </html>
+
 
 
 
