@@ -839,7 +839,7 @@ document.addEventListener('keydown', (e) => {
    <button type="submit">Submit</button>
  </form>
 </section>
-
+<button id="sendTestNotification">Send Test Notification</button>
 <footer>
   <div class="footer-left">
     © 2025 EcoSmart | All Rights Reserved| 
@@ -1656,12 +1656,43 @@ onMessage(messaging, (payload) => {
 
 // 5️⃣ Call after page loads
 initPushNotifications();
+   document.getElementById("sendTestNotification").addEventListener("click", async () => {
+  const serverKey = "BPlRr_ySBCWgZr0nqrlJHnDoln4vpDE0WkoAbLDPDJUErPFEBlGSUfPAL_LNtkbslWe2MFYUNGflK42NfK89wsw"; // Replace with your Firebase Server Key
+  const userToken = "dB31S3XU94EIgmDzfci7mV:APA91bGxXNoZJQ4lDcAGNTRXaDRG3JmhtxVMD2MMZTWU6M-c6Wq7KHRnWHFbzcyD5sdbQtP5KuBfaU6BEcJJ-cAyBC9YDBU_hWl7U5gziNzqkmTJKiZywBY"; // Replace with the token from console
+
+  const payload = {
+    to: userToken,
+    notification: {
+      title: "EcoSmart Test Notification",
+      body: "This is a test notification sent from your browser!",
+      icon: "/ecosmart.jpg"
+    }
+  };
+
+  try {
+    const response = await fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      headers: {
+        "Authorization": `key=${serverKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    console.log("Notification sent response:", data);
+  } catch (err) {
+    console.error("Error sending notification:", err);
+  }
+});
+
 </script>
 
 
 
 </body>
 </html>
+
 
 
 
