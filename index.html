@@ -1598,7 +1598,6 @@ function ensureUserData(email) {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 // 1️⃣ Firebase config
 const firebaseConfig = {
@@ -1615,52 +1614,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
-const db = getFirestore(app);
 
 console.log("Firebase initialized, Messaging ready");
 
-// 3️⃣ Function to save token to Firestore
-async function saveTokenToFirestore(token) {
-  try {
-    // Use a unique identifier, e.g., email if logged in
-    const userId = localStorage.getItem('ecoUserEmail') || token;
-    await setDoc(doc(db, "fcmTokens", userId), {
-      token: token,
-      lastUpdated: new Date()
-    });
-    console.log("Token saved to Firestore");
-  } catch (err) {
-    console.error("Error saving token:", err);
-  }
-}
-
-// 4️⃣ Initialize Push Notifications
+// 3️⃣ Function to initialize push notifications
 async function initPushNotifications() {
   try {
+    // Ask user permission
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
       console.log("Notification permission denied");
       return;
     }
 
-    // Register service worker manually
-    const registration = await navigator.serviceWorker.register('/EcoSmart/firebase-messaging-sw.js');
+    // ✅ Register the corrected service worker at root
+    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
 
-    // Get FCM token
+    // ✅ Get FCM token using the SW
     const token = await getToken(messaging, {
       vapidKey: "BPlRr_ySBCWgZr0nqrlJHnDoln4vpDE0WkoAbLDPDJUErPFEBlGSUfPAL_LNtkbslWe2MFYUNGflK42NfK89wsw",
       serviceWorkerRegistration: registration
     });
 
     console.log("User push token:", token);
-    saveTokenToFirestore(token);
+    // Optional: send this token to Firestore or your server
 
   } catch (err) {
     console.error("Push notification error:", err);
   }
 }
 
-// 5️⃣ Foreground notifications
+// 4️⃣ Handle foreground notifications
 onMessage(messaging, (payload) => {
   console.log('Foreground message received:', payload);
   if (payload.notification) {
@@ -1671,15 +1655,17 @@ onMessage(messaging, (payload) => {
   }
 });
 
-// 6️⃣ Call after page load
+// 5️⃣ Initialize notifications on page load
 initPushNotifications();
 </script>
 
 
 
 
+
 </body>
 </html>
+
 
 
 
