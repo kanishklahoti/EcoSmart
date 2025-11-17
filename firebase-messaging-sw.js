@@ -1,8 +1,8 @@
-// Import Firebase scripts for messaging in service worker
+// Import Firebase scripts (for messaging)
 importScripts('https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging.js');
 
-// 1️⃣ Initialize Firebase in the service worker
+// Initialize Firebase in service worker
 const firebaseConfig = {
   apiKey: "AIzaSyCd0TFYRUhffPg2Tn65JJBUxXFb8pk_a_M",
   authDomain: "ecosmart-a378d.firebaseapp.com",
@@ -15,26 +15,24 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+// Retrieve Firebase Messaging object
 const messaging = firebase.messaging();
 
-// 2️⃣ Background message handler
+// Handle background messages
 messaging.onBackgroundMessage(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
   const notificationTitle = payload.notification?.title || "EcoSmart Notification";
   const notificationOptions = {
     body: payload.notification?.body || "Check your EcoSmart dashboard!",
-    icon: '/EcoSmart/ecosmart.jpg', // replace with your logo
-    data: payload.data // optional, can include any extra info
+    icon: '/EcoSmart/ecosmart.jpg' // your logo
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// 3️⃣ Optional: handle notification click
+// Optional: handle notification click
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow('/') // open your homepage or dashboard
-  );
+  event.waitUntil(clients.openWindow('/')); // open homepage/dashboard
 });
