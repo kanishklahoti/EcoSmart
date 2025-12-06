@@ -428,11 +428,11 @@ justify-content:center;
   #chatbot-window { right: 12px; left: 12px; width:auto; bottom: 84px; }
   #chatbot-messages { height: 180px; }
 }
- .profile {
+.profile {
   margin-left: 20px;
   position: relative;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-block;
 }
 .profile img {
   width: 45px;
@@ -487,9 +487,8 @@ justify-content:center;
   font-size: 12px;
   color: #666;
 }
-.hidden { display: none !important; }
 
-/* Modal Styles */
+/* === Modal === */
 .modal {
   position: fixed;
   top:0; left:0;
@@ -535,7 +534,7 @@ justify-content:center;
   border-radius:8px; cursor:pointer;
 }
 #save-profile:hover { background:#45a049; }
-
+.hidden { display:none !important; }
 
 </style>
 
@@ -1778,90 +1777,106 @@ onMessage(messaging, (payload) => {
 initPushNotifications();
 </script>
   <script>
-// --- Load / Save User Data ---
-let userData = JSON.parse(localStorage.getItem("ecoUser")) || { name: "", email: "", photo: "" };
-
-// Check if user is logged in (your current login check)
-const isLoggedIn = localStorage.getItem("loggedIn") === "true"; // adjust to your logic
-
+/* ===== PROFILE CIRCLE FEATURE ===== */
+// Only show if logged in
+const isLoggedIn = localStorage.getItem("loggedIn") === "true";
 if(isLoggedIn){
-  document.getElementById('user-profile').classList.remove('hidden');
-  document.getElementById('user-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
-  document.getElementById('dropdown-name').textContent = userData.name || "Add your name";
-  document.getElementById('dropdown-email').textContent = userData.email;
-}
+  let userData = JSON.parse(localStorage.getItem("ecoUser")) || { name: "", email: "", photo: "" };
+  if(!userData.email){
+    userData.email = localStorage.getItem("userEmail") || "user@example.com";
+    localStorage.setItem("ecoUser", JSON.stringify(userData));
+  }
 
-// --- Dropdown toggle ---
-const profile = document.getElementById('user-profile');
-if(profile){
+  // Create profile circle HTML dynamically
+  const profileHTML = `
+  <div id="user-profile" class="profile">
+    <img id="user-avatar" src="${userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png'}" alt="User Avatar">
+    <div class="profile-dropdown hidden">
+      <div class="user-info">
+        <strong id="dropdown-name">${userData.name || "Add your name"}</strong>
+        <span id="dropdown-email">${userData.email}</span>
+      </div>
+      <hr style="margin:8px 0; border:0; border-top:1px solid #eee;">
+      <a href="#" id="settings-btn">Settings</a>
+      <a href="#" id="logout-btn">Logout</a>
+    </div>
+  </div>`;
+
+  const logo = document.querySelector("header .logo");
+  if(logo) logo.insertAdjacentHTML('afterend', profileHTML);
+
+  // Dropdown toggle
+  const profile = document.getElementById('user-profile');
   profile.addEventListener('click', e=>{
     e.stopPropagation();
-    const dd = profile.querySelector('.profile-dropdown');
-    dd.classList.toggle('show');
+    profile.querySelector('.profile-dropdown').classList.toggle('show');
   });
   document.addEventListener('click', ()=>{
-    const dd = profile.querySelector('.profile-dropdown');
-    if(dd) dd.classList.remove('show');
+    profile.querySelector('.profile-dropdown').classList.remove('show');
   });
-}
 
-// --- Settings Modal ---
-const modalHTML = `
-<div id="settings-modal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Profile Settings</h2>
-    <div class="profile-photo-section">
-      <img id="modal-avatar" src="${userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png'}" alt="Profile Photo">
-      <input type="file" id="photo-input" accept="image/*">
+  // Settings modal
+  const modalHTML = `
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Profile Settings</h2>
+      <div class="profile-photo-section">
+        <img id="modal-avatar" src="${userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png'}" alt="Profile Photo">
+        <input type="file" id="photo-input" accept="image/*">
+      </div>
+      <div class="profile-fields">
+        <label>Name:</label>
+        <input type="text" id="name-input" placeholder="Add your name" value="${userData.name}">
+        <label>Email (readonly):</label>
+        <input type="email" id="email-input" readonly value="${userData.email}">
+      </div>
+      <button id="save-profile">Save</button>
     </div>
-    <div class="profile-fields">
-      <label>Name:</label>
-      <input type="text" id="name-input" placeholder="Add your name" value="${userData.name}">
-      <label>Email (readonly):</label>
-      <input type="email" id="email-input" readonly value="${userData.email}">
-    </div>
-    <button id="save-profile">Save</button>
-  </div>
-</div>`;
-document.body.insertAdjacentHTML('beforeend', modalHTML);
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-const modal = document.getElementById('settings-modal');
-document.getElementById('settings-btn').addEventListener('click', ()=>{
-  modal.classList.remove('hidden');
-  document.getElementById('modal-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
-  document.getElementById('name-input').value = userData.name || "";
-  document.getElementById('email-input').value = userData.email;
-});
-document.querySelector('.close-btn').addEventListener('click', ()=> modal.classList.add('hidden'));
+  const modal = document.getElementById('settings-modal');
+  document.getElementById('settings-btn').addEventListener('click', ()=>{
+    modal.classList.remove('hidden');
+    document.getElementById('modal-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
+    document.getElementById('name-input').value = userData.name;
+  });
+  document.querySelector('.close-btn').addEventListener('click', ()=> modal.classList.add('hidden'));
 
-// --- Save Profile ---
-document.getElementById('save-profile').addEventListener('click', ()=>{
-  const nameVal = document.getElementById('name-input').value.trim();
-  const photoInput = document.getElementById('photo-input');
-  if(photoInput.files && photoInput.files[0]){
-    const reader = new FileReader();
-    reader.onload = e=>{
-      userData.photo = e.target.result;
+  // Save profile
+  document.getElementById('save-profile').addEventListener('click', ()=>{
+    const nameVal = document.getElementById('name-input').value.trim();
+    const photoInput = document.getElementById('photo-input');
+    if(photoInput.files && photoInput.files[0]){
+      const reader = new FileReader();
+      reader.onload = e=>{
+        userData.photo = e.target.result;
+        userData.name = nameVal;
+        localStorage.setItem('ecoUser', JSON.stringify(userData));
+        updateProfileUI();
+        modal.classList.add('hidden');
+      }
+      reader.readAsDataURL(photoInput.files[0]);
+    } else {
       userData.name = nameVal;
       localStorage.setItem('ecoUser', JSON.stringify(userData));
       updateProfileUI();
       modal.classList.add('hidden');
     }
-    reader.readAsDataURL(photoInput.files[0]);
-  } else {
-    userData.name = nameVal;
-    localStorage.setItem('ecoUser', JSON.stringify(userData));
-    updateProfileUI();
-    modal.classList.add('hidden');
-  }
-});
+  });
 
-// --- Refresh UI function ---
-function updateProfileUI(){
-  document.getElementById('user-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
-  document.getElementById('dropdown-name').textContent = userData.name || "Add your name";
-  document.getElementById('dropdown-email').textContent = userData.email;
+  // Refresh profile UI
+  function updateProfileUI(){
+    document.getElementById('user-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
+    document.getElementById('dropdown-name').textContent = userData.name || "Add your name";
+    document.getElementById('dropdown-email').textContent = userData.email;
+  }
+
+  // Logout button hook
+  document.getElementById('logout-btn').addEventListener('click', ()=>{
+    if(typeof logout === "function") logout();
+  });
 }
 </script>
 
@@ -1870,6 +1885,7 @@ function updateProfileUI(){
 
 </body>
 </html>
+
 
 
 
