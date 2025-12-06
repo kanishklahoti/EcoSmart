@@ -428,8 +428,7 @@ justify-content:center;
   #chatbot-window { right: 12px; left: 12px; width:auto; bottom: 84px; }
   #chatbot-messages { height: 180px; }
 }
-  /* --- Profile circle & dropdown styles --- */
-.profile {
+ .profile {
   margin-left: 20px;
   position: relative;
   cursor: pointer;
@@ -488,8 +487,9 @@ justify-content:center;
   font-size: 12px;
   color: #666;
 }
+.hidden { display: none !important; }
 
-/* --- Modal styles --- */
+/* Modal Styles */
 .modal {
   position: fixed;
   top:0; left:0;
@@ -536,8 +536,6 @@ justify-content:center;
 }
 #save-profile:hover { background:#45a049; }
 
-/* Utility class */
-.hidden { display: none !important; }
 
 </style>
 
@@ -1779,56 +1777,35 @@ onMessage(messaging, (payload) => {
 // 5️⃣ Call on page load
 initPushNotifications();
 </script>
-<!-- ==== SETTINGS / PROFILE MODAL ==== -->
-<div id="settings-modal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Profile Settings</h2>
-    <div class="profile-photo-section">
-      <img id="modal-avatar" src="https://i.ibb.co/4pDNDk1/default-avatar.png" alt="Profile Photo">
-      <input type="file" id="photo-input" accept="image/*">
-    </div>
-    <div class="profile-fields">
-      <label>Name:</label>
-      <input type="text" id="name-input" placeholder="Add your name">
-      <label>Email (readonly):</label>
-      <input type="email" id="email-input" readonly>
-    </div>
-    <button id="save-profile">Save</button>
-  </div>
-</div>
-<script>
-  // === Load / Save User Data from localStorage ===
+  <script>
+// --- Load / Save User Data ---
 let userData = JSON.parse(localStorage.getItem("ecoUser")) || { name: "", email: "", photo: "" };
 
-// If email not set yet, set from login — adjust this when implementing real login.
-if (!userData.email) {
-  userData.email = "user@example.com";  // <-- Replace with real user email after login
-  localStorage.setItem("ecoUser", JSON.stringify(userData));
-}
+// Check if user is logged in (your current login check)
+const isLoggedIn = localStorage.getItem("loggedIn") === "true"; // adjust to your logic
 
-// Function to refresh UI
-function updateProfileUI() {
+if(isLoggedIn){
   document.getElementById('user-profile').classList.remove('hidden');
   document.getElementById('user-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
   document.getElementById('dropdown-name').textContent = userData.name || "Add your name";
   document.getElementById('dropdown-email').textContent = userData.email;
 }
-updateProfileUI();
 
-// Dropdown toggle
+// --- Dropdown toggle ---
 const profile = document.getElementById('user-profile');
-profile.addEventListener('click', e => {
-  e.stopPropagation();
-  const dd = profile.querySelector('.profile-dropdown');
-  dd.classList.toggle('show');
-});
-document.addEventListener('click', () => {
-  const dd = profile.querySelector('.profile-dropdown');
-  if (dd) dd.classList.remove('show');
-});
+if(profile){
+  profile.addEventListener('click', e=>{
+    e.stopPropagation();
+    const dd = profile.querySelector('.profile-dropdown');
+    dd.classList.toggle('show');
+  });
+  document.addEventListener('click', ()=>{
+    const dd = profile.querySelector('.profile-dropdown');
+    if(dd) dd.classList.remove('show');
+  });
+}
 
-// Settings Modal
+// --- Settings Modal ---
 const modalHTML = `
 <div id="settings-modal" class="modal hidden">
   <div class="modal-content">
@@ -1850,30 +1827,27 @@ const modalHTML = `
 document.body.insertAdjacentHTML('beforeend', modalHTML);
 
 const modal = document.getElementById('settings-modal');
-document.getElementById('settings-btn').addEventListener('click', () => {
+document.getElementById('settings-btn').addEventListener('click', ()=>{
   modal.classList.remove('hidden');
   document.getElementById('modal-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
   document.getElementById('name-input').value = userData.name || "";
   document.getElementById('email-input').value = userData.email;
 });
+document.querySelector('.close-btn').addEventListener('click', ()=> modal.classList.add('hidden'));
 
-document.querySelector('.close-btn').addEventListener('click', () => {
-  modal.classList.add('hidden');
-});
-
-// Save updated profile info
-document.getElementById('save-profile').addEventListener('click', () => {
+// --- Save Profile ---
+document.getElementById('save-profile').addEventListener('click', ()=>{
   const nameVal = document.getElementById('name-input').value.trim();
   const photoInput = document.getElementById('photo-input');
-  if (photoInput.files && photoInput.files[0]) {
+  if(photoInput.files && photoInput.files[0]){
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = e=>{
       userData.photo = e.target.result;
       userData.name = nameVal;
       localStorage.setItem('ecoUser', JSON.stringify(userData));
       updateProfileUI();
       modal.classList.add('hidden');
-    };
+    }
     reader.readAsDataURL(photoInput.files[0]);
   } else {
     userData.name = nameVal;
@@ -1883,6 +1857,12 @@ document.getElementById('save-profile').addEventListener('click', () => {
   }
 });
 
+// --- Refresh UI function ---
+function updateProfileUI(){
+  document.getElementById('user-avatar').src = userData.photo || 'https://i.ibb.co/4pDNDk1/default-avatar.png';
+  document.getElementById('dropdown-name').textContent = userData.name || "Add your name";
+  document.getElementById('dropdown-email').textContent = userData.email;
+}
 </script>
 
 
@@ -1890,6 +1870,7 @@ document.getElementById('save-profile').addEventListener('click', () => {
 
 </body>
 </html>
+
 
 
 
