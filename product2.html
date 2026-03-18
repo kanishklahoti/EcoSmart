@@ -282,53 +282,27 @@ footer .footer-right a:hover {
   .wheel{width:260px;height:260px}
 }
 @media (max-width:600px){nav{padding:12px}.logo{font-size:1.2rem}}
-  /* Hide buttons on desktop */
-.img-btn {
-  display: none;
-}
-
 /* ===== MOBILE ONLY ===== */
 @media (max-width: 768px) {
 
   .product-image {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .img-track {
     display: flex;
     overflow-x: auto;
-    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
   }
 
-  .img-track::-webkit-scrollbar {
+  .product-image::-webkit-scrollbar {
     display: none;
   }
 
-  .img-track img {
+  .product-image img {
     width: 100%;
     flex-shrink: 0;
+    scroll-snap-align: center;
     border-radius: 10px;
   }
 
-  /* Show arrows on mobile */
-  .img-btn {
-    display: block;
-    position: absolute;
-    top: 45%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.6);
-    color: white;
-    border: none;
-    font-size: 20px;
-    padding: 8px 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10;
-  }
-
-  .prev { left: 5px; }
-  .next { right: 5px; }
 }
 </style>
 </head>
