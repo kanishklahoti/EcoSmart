@@ -282,6 +282,54 @@ footer .footer-right a:hover {
   .wheel{width:260px;height:260px}
 }
 @media (max-width:600px){nav{padding:12px}.logo{font-size:1.2rem}}
+  /* Hide buttons on desktop */
+.img-btn {
+  display: none;
+}
+
+/* ===== MOBILE ONLY ===== */
+@media (max-width: 768px) {
+
+  .product-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .img-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+  }
+
+  .img-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .img-track img {
+    width: 100%;
+    flex-shrink: 0;
+    border-radius: 10px;
+  }
+
+  /* Show arrows on mobile */
+  .img-btn {
+    display: block;
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    font-size: 20px;
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .prev { left: 5px; }
+  .next { right: 5px; }
+}
 </style>
 </head>
 <body>
@@ -305,20 +353,23 @@ footer .footer-right a:hover {
 </nav>
 
 <!-- TOP SECTION: IMAGE (left) + DETAILS (right) -->
-<div class="container">
-  <div class="product-top">
+<div class="product-image">
 
-    <div class="left-col">
-      <div class="product-image">
-        <div class="badge-discount">Diwali Sale-60% OFF</div>
-        <img id="productImg" src="Smartthermostat.jpg" alt="Automatic Curtains"><br>
- <img id="productImg" src="smartthermostat4.webp" alt="Automatic Curtains"><br>
+  <button class="img-btn prev">&#10094;</button>
 
-<img id="productImg" src="smartthermostat5.avif" alt="Smart Thermostat"><br>
- <img id="productImg" src="Smartthermostat3.jpg" alt="Automatic Curtains"><br>
-     <img id="productImg" src="Smartthermostat2.jpg" alt="Automatic Curtains"><br>
+  <div class="img-track">
+
+    <img src="Smartthermostat.jpg" alt="Smart Thermostat">
+    <img src="smartthermostat4.webp" alt="Smart Thermostat">
+    <img src="smartthermostat5.avif" alt="Smart Thermostat">
+    <img src="Smartthermostat3.jpg" alt="Smart Thermostat">
+    <img src="Smartthermostat2.jpg" alt="Smart Thermostat">
+
   </div>
-    </div>
+
+  <button class="img-btn next">&#10095;</button>
+
+</div>
 
     <div class="right-col">
       <div class="title-row">
@@ -924,6 +975,17 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 function toggleMenu() {
   document.querySelector(".nav-links").classList.toggle("show");
 }
+</script>
+<script>
+const imgTrack = document.querySelector(".img-track");
+
+document.querySelector(".product-image .next").onclick = () => {
+  imgTrack.scrollBy({ left: 300, behavior: "smooth" });
+};
+
+document.querySelector(".product-image .prev").onclick = () => {
+  imgTrack.scrollBy({ left: -300, behavior: "smooth" });
+};
 </script>
 </body>
 </html>
